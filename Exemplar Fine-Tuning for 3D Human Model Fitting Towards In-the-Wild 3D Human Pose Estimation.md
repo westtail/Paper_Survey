@@ -2,7 +2,9 @@
 Exemplar Fine-Tuning for 3D Human Model Fitting Towards In-the-Wild 3D Human Pose Estimation  
 3次元人体モデルのフィッティングのための模範的な微調整と、実世界での3次元人体ポーズの推定
 
-## Abstract
+
+
+# Abstract
 We present Exemplar Fine-Tuning (EFT), a new method to fit a 3D parametric human model to a single RGB input image cropped around a person with 2D keypoint annotations.    
 While existing parametric human model fitting approaches, such as SMPLify, rely on the “view-agnostic” human pose priors to enforce the output in a plausible 3D pose space, EFT exploits the pose prior that comes from the specific 2D input observations by leveraging a fully-trained 3D pose regressor.   
 We thoroughly compare our EFT with SMPLify, and demonstrate that EFT produces more reliable and accurate 3D human fitting outputs on the same inputs.     
@@ -17,7 +19,9 @@ SMPLifyなどの既存のパラメトリック人体モデルフィッティン�
 EFTによって擬似的に得られた3Dポーズデータは、Human3.6Mのような人間の3Dポーズデータを使わなくても、標準的な屋外ベンチマーク（3DPW）において、従来の最先端技術を凌駕する強力な3Dポーズ推定量をスーパーバイズできることを実証した。   
 我々のコードとデータは、https://github.com/facebookresearch/eft。
 
-## Introduction
+
+
+# Introduction
 We consider the problem of reconstructing the pose of humans in 3D from single 2D images, a key task in applications such as human action recognition, human-machine interaction and virtual and augmented reality.    
 Since individual 2D images do not contain sufficient information for 3D reconstruction, algorithms must supplement the missing information by a learned prior on the plausible 3D poses of the human body.   
 Established approaches such as SMPLify [1, 2] cast this as fitting the parameters of a 3D human model [3, 4, 5] to the location of 2D keypoints, manually or automatically annotated in images.    
@@ -84,7 +88,10 @@ COCO[18]のような既存の大規模な2DデータセットにEFTを用いて�
 驚くべきことに、既存の教師付きポーズ回帰法は、この擬似3Dアノテーションを用いて、実験室で収集された既存の3Dデータセット[19, 20, 21]のグランドトゥルース3Dアノテーションと同等以上に学習できることを示している。   
 実際，我々が公開している3D-fied in the wildデータは，最先端の3Dポーズリグレッサを単独で学習するのに十分であり，3Dと2Dのグランドトゥルースを持つデータセットの組み合わせで学習した手法を上回ることを示している[7, 22, 8]．  
 
-##  Related Work 
+
+
+
+#  Related Work 
 Deep learning has significantly advanced 2D pose recognition [23, 24, 25, 26, 27, 28], facilitating the more challenging task of 3D reconstruction [9, 6, 10, 11, 12, 13, 14, 7, 15, 17, 16, 22], our focus.
 
 ディープラーニングは、2Dポーズ認識を大幅に進化させ[23, 24, 25, 26, 27, 28]、我々が注目する3D再構築というより困難なタスクを容易にしている[9, 6, 10, 11, 12, 13, 14, 7, 15, 17, 16, 22]。
@@ -156,3 +163,61 @@ COCO [18]、MPII [39]、Leeds Sports Pose Dataset (LSP) [40, 41]、PennAction [4
 しかし、この研究で用いられている伝統的な最適化ベースのフィッティング手法では、データセットの品質とサイズが制限される。   
 また、大規模なモーションキャプチャのデータセットの中には、対応する画像が全くないものがいくつかある（CMU Mocap[47]やKIT[48]など）。   
 これらのモーションキャプチャデータセットは、最近、AMASSデータセットとして統一されたフォーマットで再発行された[49]。
+
+
+
+
+
+# Result
+
+We consider two applications of EFT: creating pseudo-ground-truth 3D annotations for in-the-wild datasets that natively come only with 2D annotations and post-processing the output of an existing 3D pose regressor to improve it.
+
+ここでは、EFTの2つの応用例を考えてみます。すなわち、2Dアノテーションしかない野生のデータセットに対して擬似的な地表面の3Dアノテーションを作成することと、既存の3Dポーズレグレッサーの出力を後処理して改善することです。
+
+Implementation details.    
+For the pose regressor Φ, we use the state-of-the-art SPIN network of [8].    
+For EFT, we optimize Eq. (3) using using Adam [53] with the default PyTorch parameters and a small learning rate of 10−6 stopping when the average 2D keypoints re-projection error is less than 2 pixels (usually less than 20 iterations are sufficient).   
+We also found beneficial to modify Eq. 3 to ignore the locations of hips and ankles, which are noisy especially for manual annotations, and use instead a term that matches only the 2D orientation of the lower legs (see the appendix for details).  
+
+実装の詳細    
+ポーズ・リグレッサーΦには、最先端のSPINネットワーク[8]を使用しています。    
+EFTについては，Adam[53]を用いて式(3)を最適化する．(3)をAdam [53]を用いて最適化し、デフォルトのPyTorchパラメータと10-6の小さな学習率で、平均的な2Dキーポイントの再投影エラーが2ピクセル以下になったときに停止します（通常は20回以下の反復で十分です）。  
+また、Eq.3を修正して、特にマニュアルアノテーションの場合にノイズとなる腰と足首の位置を無視し、代わりに下肢の2Dオリエンテーションのみにマッチする項を使用することが有益であることがわかりました（詳細は付録を参照）。
+
+Datasets.    
+We use the in-the-wild datasets with 2D pose annotations: COCO [18], MPII [39], and LSP [40, 41].   
+We consider the default splits as well a the “COCO-Part” subset that [15] uses for training and that contains only instances for which the full set of 12 keypoint annotations are present (occluded instances often miss keypoints).     
+To this, we add “COCO-All” containing all samples with at least 5 keypoint annotations.    
+We also use datasets with 3D pose annotations, including H36M [19, 54], MPI-INF-3DHP [20], and Panoptic Studio [21].    
+Since a multi-view setup is usually required to capture this kind of ground truth, these datasets are collected in laboratory conditions.    
+We use the “moshed” version of H36M and MPI-INF-3DHP [7, 8], and produce SMPL fittings for Panoptic Studio DB using the provided 3D keypoints (see the supp. for details).     
+The 3DPW dataset [51] is captured outdoor and comes with 3D ground truth obtained by using IMUs and cameras by using IMU sensors and cameras.
+
+データセット    
+2Dポーズのアノテーションを持つin-the-wildデータセットを使用します。COCO [18]、MPII [39]、LSP [40, 41]。  
+デフォルトの分割に加えて、[15]が学習に使用した "COCO-Part "サブセットも考慮する。このサブセットには、12個のキーポイントアノテーションのフルセットが存在するインスタンスのみが含まれている（隠蔽されたインスタンスはキーポイントを見逃すことが多い）。    
+このサブセットに、少なくとも5つのキーポイントのアノテーションがあるすべてのサンプルを含む「COCO-All」を追加しました。   
+また，H36M [19, 54]，MPI-INF-3DHP [20]，Panoptic Studio [21]などの3Dポーズアノテーションを持つデータセットも使用している．   
+このようなグランドトゥルースを得るためには，通常，マルチビューのセットアップが必要であるため，これらのデータセットは実験室条件で収集されたものである．   
+H36MとMPI-INF-3DHP[7, 8]の "moshed "バージョンを使用し，Panoptic Studio DBでは提供された3Dキーポイントを使用してSMPLフィッティングを作成しています（詳細は補足を参照）．    
+3DPWデータセット[51]は、屋外で撮影されたもので、IMUセンサーやカメラを用いて得られた3Dグランドトゥルースが付属しています。
+
+# Discussion
+
+We introduced Exemplar Fine-Tuning (EFT), a method to fit a parametric 3D human body model to 2D keypoint annotations.     
+Leveraging a trained 3D pose regressor as pose prior conditional on RGB inputs, EFT produces more plausible and accurate fitting outputs than existing methods.   
+EFT can be used in post-processing to improve the output of existing 3D pose regressors.    
+It can also be used to generate high-quality 3D pseudo-ground-truth annotations for datasets collected in the wild.    
+The quality of these labels is sufficient to supervise state-of-the art 3D pose regressors.      
+We expect these ‘EFT datasets’ to be of particular interest to the research community because they greatly simplify training 3D pose regressors, avoiding complicated preprocessing or training techniques, as well as the need to mix 2D and 3D annotations.    
+We will release the ‘EFT datasets’ to the community, allowing their use in many other tasks, including dense keypoint detection [44], depth estimation [56], or the recognition
+of human-object interactions in the wild.
+
+2Dのキーポイントアノテーションにパラメトリックな3D人体モデルをフィットさせる手法であるExemplar Fine-Tuning（EFT）を紹介しました。    
+EFTは、訓練された3DポーズレグレッサーをRGB入力に対するポーズ事前条件として活用することで、既存の手法に比べてより妥当で正確なフィット出力を得ることができます。  
+EFTは、既存の3Dポーズレグレッサーの出力を向上させるために、後処理で使用することができます。   
+また、EFTは、自然界で収集されたデータセットに対して、高品質な3D疑似地表面アノテーションを生成するためにも使用できる。   
+これらのラベルの品質は、最先端の3Dポーズレグレッサーを監督するのに十分なものです。     
+この「EFTデータセット」は、複雑な前処理や学習技術を必要とせず、2Dと3Dのアノテーションを混在させる必要もないため、3Dポーズレグレッサーの学習を大幅に簡素化することができ、研究者にとっても興味深いものになると期待しています。   
+EFTデータセットをコミュニティに公開することで、密なキーポイント検出[44]、深度推定[56]、野生動物における人間と物体のインタラクションの認識など、他の多くのタスクに利用することができます。
+人と物の相互作用の認識など、様々なタスクに利用することができます。
