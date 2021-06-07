@@ -74,3 +74,85 @@ At the same time, it results in more accurate 2D fits than the regressor alone.
 さらに，この事前情報には 2次元のキーポイントの位置よりも多くの情報を含むRGBの入力画像を条件としています。  
 同時に、レグレッサーのみの場合よりも、より正確な2Dフィットが得られます。
 
+The second application of EFT is to generate 3D body pose data in the wild.    
+We show this  by taking an existing large-scale 2D dataset such as COCO [18] and using EFT to augment it with approximate 3D body pose annotations.     
+Remarkably, we show that existing supervised pose regressor methods can be trained using these pseudo-3D annotations as well or better than using ground truth 3D annotations in existing 3D datasets [19, 20, 21], which, for the most part, are collected in laboratory condition.    
+In fact, we show that our 3D-fied in the wild data, which we will release to the public, is sufficient to train state-of-the-art 3D pose regressors by itself, outperforming methods trained on the combination of datasets with 3D and 2D ground-truth [7, 22, 8].   
+
+EFTの2つ目の用途は、自然の中で3Dボディポーズデータを生成することです。   
+COCO[18]のような既存の大規模な2DデータセットにEFTを用いて、3Dボディポーズの近似アノテーションを追加することで、このことを示しています。    
+驚くべきことに、既存の教師付きポーズ回帰法は、この擬似3Dアノテーションを用いて、実験室で収集された既存の3Dデータセット[19, 20, 21]のグランドトゥルース3Dアノテーションと同等以上に学習できることを示している。   
+実際，我々が公開している3D-fied in the wildデータは，最先端の3Dポーズリグレッサを単独で学習するのに十分であり，3Dと2Dのグランドトゥルースを持つデータセットの組み合わせで学習した手法を上回ることを示している[7, 22, 8]．  
+
+##  Related Work 
+Deep learning has significantly advanced 2D pose recognition [23, 24, 25, 26, 27, 28], facilitating the more challenging task of 3D reconstruction [9, 6, 10, 11, 12, 13, 14, 7, 15, 17, 16, 22], our focus.
+
+ディープラーニングは、2Dポーズ認識を大幅に進化させ[23, 24, 25, 26, 27, 28]、我々が注目する3D再構築というより困難なタスクを容易にしている[9, 6, 10, 11, 12, 13, 14, 7, 15, 17, 16, 22]。
+
+Single-image 3D human pose estimation.   
+Single-view 3D pose reconstruction methods differ in how they incorporate a 3D pose prior and in how they perform the prediction.    
+Fitting-based methods assume a 3D body model such as SMPL [3] and SCAPE [29], and use an optimization algorithm to fit it to the 2D observations.    
+While early approaches [30, 31] required manual input, starting with SMPLify [1] the process has been fully automatized, then improved in [2] to use silhouette annotations,
+and eventually extended to multiple views and multiple people [32].    
+Regression-based methods, on the other hand, predict 3D pose directly.    
+The work of [33] uses sparse linear regression that incorporates a tractable but somewhat weak pose prior. Later approaches use instead deep neural networks, and differ mainly in the nature of their inputs and outputs [9, 6, 10, 11, 12, 13, 14, 7, 15, 17, 16, 34, 35].
+Some works start from a pre-detected 2D skeleton [10] while others start from raw images [7].  
+Using a 2D skeleton relies on the quality of the underlying 2D keypoint detector and discards appearance details that could help fitting the 3D model to the image. 
+Using raw images can potentially make use of this information, but training such models from current 3D indoor datasets might fail to generalize to unconstrained images.    
+Hence several papers combine 3D indoor datasets with 2D in-the-wild ones [7, 17, 15, 6, 14, 13, 7, 35, 22]. Methods also differ in their output, with some predicting 3D keypoints directly [10], some predicting the parameters of a 3D human body model [7, 17], and others volumetric heatmaps for the body joints [11].   
+Finally, hybrid methods such as SPIN [5] or MTC [17] combine fitting and regression approaches.
+
+一枚の画像から人間の3Dポーズを推定する。  
+一枚の画像から3Dポーズを再構築する手法は、3Dポーズの事前情報をどのように組み込むか、また、どのように予測を行うかで異なる。   
+フィット法は、SMPL [3]やSCAPE [29]のような3Dボディモデルを仮定し、最適化アルゴリズムを用いて2D観測データにフィットさせる。   
+初期のアプローチ[30, 31]では手動入力が必要でしたが，SMPLify[1]からは完全に自動化され，[2]ではシルエットのアノテーションを使用するように改良されました．
+そして最終的には，複数のビューと複数の人物にまで拡張されました．   
+一方、回帰ベースの手法は、3Dポーズを直接予測する。   
+33]の研究では、扱いやすいがやや弱いポーズの事前情報を組み込んだ疎な線形回帰を使用している。その後のアプローチでは、代わりに深層ニューラルネットワークを使用しており、主にその入力と出力の性質が異なる[9, 6, 10, 11, 12, 13, 14, 7, 15, 17, 16, 34, 35]。
+事前に検出された2Dスケルトンから始めるものもあれば[10]、生の画像から始めるものもある[7]。 
+2Dスケルトンの使用は、基礎となる2Dキーポイント検出器の品質に依存しており、3Dモデルを画像に適合させるのに役立つ外観の詳細は破棄される。  
+生の画像を用いることで、この情報を利用できる可能性があるが、現在の3Dインドアデータセットからこのようなモデルをトレーニングしても、制約のない画像に一般化できない可能性がある。   
+そのため，いくつかの論文では，3D屋内データセットと2D野生データセットを組み合わせている[7, 17, 15, 6, 14, 13, 7, 35, 22]．また，3Dキーポイントを直接予測する手法もあれば キーポイントを直接予測するもの[10]，3D人体モデルのパラメータを予測するもの[7, 17]，そして体の関節のボリューム・ヒートマップを予測するものなどがある[11]．  
+最後に，SPIN [5]やMTC [17]のようなハイブリッド手法は，フィッティングと MTC [17]などのハイブリッド手法は，フィッティングと回帰のアプローチを組み合わせたものです．
+
+3D reconstruction without paired 3D ground-truth.    
+While regression methods usually require image datasets paired with 3D ground truth annotations, fitting methods such as SMPLify rely only on 2D annotations by predicting a small number of model parameters and by using a prior learned on independent motion capture data.    
+However, their output quality is largely dependent on the initialization, with problematic results for challenging poses (e.g., see Fig. 2 left panel). 
+Furthermore, the space of plausible human body poses can be described empirically, by collecting a large number of samples in laboratory conditions [36, 37, 5], but this may lack realism.    
+Regression methods [7, 38] can also be learned without requiring images with 3D annotations, by combining 2D datasets with a parametric 3D model and empirical motion capture pose samples, integrating them into their neural network regressor by means of adversarial training.    
+However, while the predictions obtained by such methods are plausible, they often do not fit the 2D data very accurately.   
+Fitting could be improved by refining this initial solution by means of an optimization based method as in SPIN [8], but empirically we have found that this distorts the pose once again, leading to solutions that are not plausible anymore.
+
+ペアとなる3Dグランドトゥルースがなくても3D再構成が可能です。   
+回帰法では、通常、3Dグランドトゥルースのアノテーションとペアになった画像データが必要ですが、SMPLifyのようなフィット法では、少数のモデルパラメータを予測し、独立したモーションキャプチャデータで学習した事前情報を使用することで、2Dアノテーションのみに依存します。   
+しかし、これらの手法の出力品質は初期化に大きく依存しており、難易度の高いポーズでは問題のある結果となります（例：図2左パネル参照）。
+さらに，もっともらしい人体のポーズの空間は，実験室条件で多数のサンプルを収集することによって経験的に記述することができるが[36, 37, 5]，現実性に欠ける可能性がある．   
+回帰法[7, 38]は、パラメトリックな3Dモデルを持つ2Dデータセットと、経験的なモーションキャプチャのポーズサンプルを組み合わせ、それらを敵対的な学習によってニューラルネットワークの回帰器に統合することで、3Dアノテーションを持つ画像を必要とせずに学習することもできる。   
+しかし、このような方法で得られた予測はもっともなものですが、2Dデータにはあまり正確にフィットしないことがよくあります。  
+この初期解をSPIN[8]のような最適化ベースの手法で改良することで、フィッティングを向上させることができますが、経験的には、この方法ではポーズが再び歪んでしまい、もはやもっともらしくない解になってしまうことがわかっています。
+
+Human pose datasets.   
+There are several in-the-wild datasets with sparse 2D pose annotations, including COCO [18], MPII [39], Leeds Sports Pose Dataset (LSP) [40, 41], PennAction [42] and Posetrack [43].    
+Furthermore, Dense Pose [44] has introduced a dataset with dense surface point annotations, mapping images to a UV representation of a parametric 3D human model [3].
+Compared to annotating 2D keypoints, annotating 3D human poses is much more challenging as there are no easy-to-use or intuitive tools to input the annotations.   
+Hence, current 3D annotations are mostly obtained by means of motion capture systems in indoor environments.     
+Examples include the Human3.6M dataset [19], Human Eva [45], Panoptic Studio [21], and MPI-INF-3DHP [46].   
+These datasets provide 3D motion capture data paired with 2D images, but the images are very controlled.    
+3DPW dataset [51] is exceptional by capturing outdoor scenes by a hand-held video camera and IMUs.    
+There exists an approach to produce a dataset with 3D pose annotations on Internet photos [2].    
+However, the traditional optimization-based fitting method used in this work limits the quality and size of dataset.    
+There are also several large scale motion capture datasets that do not have corresponding images at all (e.g. CMU Mocap [47] and KIT [48]).    
+These motion capture datasets have recently been reissued in a unified format in the AMASS dataset [49].
+
+人間のポーズのデータセット。  
+COCO [18]、MPII [39]、Leeds Sports Pose Dataset (LSP) [40, 41]、PennAction [42]、Posetrack [43]など、スパースな2Dポーズのアノテーションを持つデータセットがいくつか存在する。   
+さらに，Dense Pose [44]では，パラメトリックな 3D 人体モデルの UV 表現に画像をマッピングすることで，密な表面点のアノテーションを行ったデータセットを紹介している[3]．   
+2次元のキーポイントのアノテーションに比べて，3次元の人物のポーズのアノテーションは，アノテーションを入力するための使いやすい，あるいは直感的なツールがないため，はるかに困難である．   
+そのため、現在の3Dアノテーションは、主に屋内環境のモーションキャプチャーシステムを用いて行われている。    
+その例として、Human3.6M dataset [19]、Human Eva [45]、Panoptic Studio [21]、MPI-INF-3DHP [46]などがある。
+これらのデータセットは、3Dモーションキャプチャーデータと2D画像のペアを提供していますが、画像は非常に制御されています。   
+3DPWデータセット[51]は，ハンドヘルドのビデオカメラとIMUを用いて屋外のシーンを撮影した例外的なデータである．   
+インターネット上の写真に3Dポーズのアノテーションを付けてデータセットを作成するアプローチがある[2]。   
+しかし、この研究で用いられている伝統的な最適化ベースのフィッティング手法では、データセットの品質とサイズが制限される。   
+また、大規模なモーションキャプチャのデータセットの中には、対応する画像が全くないものがいくつかある（CMU Mocap[47]やKIT[48]など）。   
+これらのモーションキャプチャデータセットは、最近、AMASSデータセットとして統一されたフォーマットで再発行された[49]。
