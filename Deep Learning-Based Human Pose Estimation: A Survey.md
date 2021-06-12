@@ -27,7 +27,7 @@ Index Terms—Survey of human pose estimation, 2D and 3D pose estimation, deep l
 
 索引用語-人間のポーズ推定に関する調査、2Dおよび3Dポーズ推定、深層学習に基づくポーズ推定、ポーズ推定データセット、ポーズ推定メトリクス
 
-## INTRODUCTION
+## 1 INTRODUCTION
 HUMAN pose estimation (HPE), which has been extensively studied in computer vision literature, involves estimating the configuration of human body parts from input data captured by sensors, in particular images and videos.   
 HPE provides geometric and motion information of the human body which has been applied to a wide range of applications (e.g., human-computer interaction, motion analysis, augmented reality (AR), virtual reality (VR), healthcare, etc.).    
 With the rapid development of deep learning solutions in recent years, such solutions have been shown to outperform classical computer vision methods in various tasks including image classification [1], semantic segmentation [2], and object detection [3].    
@@ -56,7 +56,7 @@ HPEタスクに深層学習技術を採用することで、すでに大きな�
 これまでに、深度センサー、慣性計測ユニット（IMU）、高周波デバイスなどのセンサーを利用する方法がありましたが、これらのアプローチは通常、費用対効果が低く、専用のハードウェアを必要とします。   
 HPEの研究が急速に進展していることを踏まえ、本稿では、深層学習ベースの2Dおよび3D HPEに関する現在の研究の全体像を把握するために、最近の進歩を追跡し、その成果をまとめようとしている。
 
-## Previous surveys and our contributions
+## 1.1 Previous surveys and our contributions
 * 過去の調査と私たちの貢献
 
 Table 1 lists the related surveys and reviews previously reported on HPE.    
@@ -106,3 +106,45 @@ HPEに関連する従来の手法と深層学習ベースの手法の両方に�
 * 2Dと3DのHPEについて、HPEにおける重要な課題を提示し、性能向上に向けた将来の研究の可能性を示唆しています。   
 
 これらの貢献により、本調査はこれまでの調査論文よりも包括的で、最新かつ詳細なものとなっています。
+
+## 1.2 Organization
+編成について
+
+In the following sections, we will cover various aspects of recent advances in HPE with deep learning.     
+We first overview the human body modeling techniques in § 2.    
+Then, HPE is divided into two main categories: 2D HPE (§ 3) and 3D HPE (§ 4).   
+Fig. 1 shows the taxonomy of deep learning methods for HPE.    
+According to the number of people, 2D HPE methods are categorized into single-person and multi-person settings.    
+For single-person methods (§ 3.1), there are two categories of deep learning-based methods:   
+(1) regression methods, which directly build a mapping from input images to body joint coordinates by employing deep learning-based regressors;    
+(2) body part detection methods, which consist of two steps: the first step involves generating heatmaps of keypoints (i.e., joints) for body part localization, and the second step involves assembling these detected keypoints into whole body pose or skeleton.    
+For multi-person methods (§ 3.2), there are also two types of deep learning-based methods:   
+(1) top-down methods, which construct human body poses by detecting the people first and then utilizing single-person HPE to predict the keypoints for each person;   
+(2) bottom-up methods, which first detect body keypoints without knowing the number of people, then group the keypoints into individual poses.     
+3D HPE methods are classified according to the input source types: monocular RGB images and videos (§ 4.1), or other sensors (e.g., inertial measurement unit sensors, § 4.2).     
+The majority of these methods use monocular RGB images and videos, and they are further divided into single-view and multi-view methods.     
+Single-view methods are then separated by single-person versus multi-person.     
+Multi-view settings are deployed mainly for multi-person pose estimation. Hence, single-person or multi-person is not specified in this category.    
+Next, depending on the 2D and 3D HPE pipelines, the datasets and evaluation metrics commonly used are summarized followed by a comparison of results of the promising methods (§ 5).      
+In addition, various applications of HPE such as AR/VR are mentioned (§ 6).    
+Finally, the paper ends by an insightful discussion of some promising directions for future research (§ 7).
+
+以下のセクションでは、深層学習を用いたHPEの最近の進歩について様々な角度から取り上げます。    
+まず、§2で人体のモデリング技術を概観する。   
+そして、HPEを2D HPE（§3）と3D HPE（§4）の2つに大別する。  
+図1は、HPEのための深層学習手法の分類法を示している。   
+2D HPEの手法は、人数に応じて、一人用と複数人用に分類される。   
+一人用の手法（§3.1）では、深層学習を用いた手法は2つに分類される。  
+(1)回帰法：深層学習を用いた回帰器を用いて、入力画像から体の関節座標へのマッピングを直接構築する方法。   
+(2) 体の部位を検出する手法で、体の部位を特定するためのキーポイント（関節）のヒートマップを生成するステップと、そのヒートマップを組み合わせて体の部位を検出するステップの2つがある。第2段階では、検出されたキーポイントを全身のポーズやスケルトンに組み立てる。   
+また、多人数向けの手法（§3.2）では、深層学習を用いた2種類の手法があります。  
+(1)トップダウン方式は、まず人物を検出し、一人用のHPEを利用して各人物のキーポイントを予測することで人体のポーズを構築する。  
+(2)人数がわからない状態で体のキーポイントを検出し、そのキーポイントを個々のポーズにグループ化するボトムアップ方式。    
+3D HPE手法は、入力ソースの種類によって、単眼のRGB画像や動画（§4.1）、またはその他のセンサ（例えば、慣性計測ユニットセンサ、§4.2）に分類される。    
+これらの手法の多くは，単眼のRGB画像や動画を用いるものであり，さらに，単眼の手法と多眼の手法に分けられる．    
+シングルビュー方式は、その後、一人用と複数人用で分けられる。    
+マルチビュー方式は、主に多人数のポーズ推定に用いられる。したがって、このカテゴリーでは、single-personかmulti-personかは特定されません。   
+次に、2Dと3DのHPEパイプラインに応じて、一般的に使用されているデータセットと評価指標をまとめ、有望な手法の結果を比較する（§5）。     
+さらに、AR/VRなどのHPEの様々なアプリケーションについても言及する（§6）。   
+最後に，今後の研究の方向性について，洞察に満ちた議論をして本稿を終える（§7）。
+
