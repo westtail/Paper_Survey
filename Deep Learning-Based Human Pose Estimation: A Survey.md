@@ -148,3 +148,65 @@ Finally, the paper ends by an insightful discussion of some promising directions
 さらに、AR/VRなどのHPEの様々なアプリケーションについても言及する（§6）。   
 最後に，今後の研究の方向性について，洞察に満ちた議論をして本稿を終える（§7）。
 
+## 2 HUMAN BODY MODELING
+* 人体のモデリング  
+Human body modeling is an important aspect of HPE in order to represent keypoints and features extracted from input data.    
+For example, most HPE methods use an N-joints rigid kinematic model.    
+A human body is a sophisticated entity with joints and limbs, and contains body kinematic structure and body shape information.    
+In typical methods, a model-based approach is employed to describe and infer human body pose, and render 2D and 3D poses.     
+There are typically three types of models for human body modeling, i.e., kinematic model (used for 2D/3D HPE), planar model (used for 2D HPE) and volumetric model (used for 3D HPE), as shown in Fig. 2.     
+In the following sections, a description of these models is provided covering different representations.  
+
+人体のモデリングは、入力データから抽出したキーポイントや特徴を表現するために、HPEの重要な要素です。   
+例えば、多くのHPE手法では、N関節の剛体運動モデルを使用しています。   
+人体は、関節や手足を持つ精巧な実体であり、体の運動構造や体の形状情報を含んでいます。   
+一般的な手法では、人体の姿勢を記述・推定し、2Dおよび3Dポーズをレンダリングするために、モデルベースのアプローチが採用されています。    
+人体モデルには、図2に示すように、キネマティックモデル（2D/3D HPEに使用）、プラナーモデル（2D HPEに使用）、ボリュームモデル（3D HPEに使用）の3種類のモデルがある。    
+以下では、これらのモデルについて、異なる表現方法を説明します。
+
+##  2.1 Kinematic model   
+* キネマティックモデル   
+The kinematic model, also called skeleton-based model [12] or kinematic chain model [14], as shown in Fig. 2 (a), includes a set of joint positions and the limb orientations to represent the human body structure.     
+The pictorial structure model (PSM) [15] is a widely used graph model, which is also known as the tree-structured model.     
+This flexible and intuitive human body model is successfully utilized in 2D HPE [16] [17] and 3D HPE [18] [19].     
+Although the kinematic model has the advantage of flexible graph-representation, it is limited in representing texture and shape information.
+
+キネマティック・モデルは，図2(a)に示すように，スケルトン・ベース・モデル[12]やキネマティック・チェーン・モデル[14]とも呼ばれ，人体の構造を表現するための関節位置と四肢の向きのセットを含む．    
+PSM（Pictorial Structure Model）[15]は，広く使われているグラフモデルで，木構造モデルとも呼ばれています．    
+この柔軟で直感的な人体モデルは，2D HPE [16] [17]や3D HPE [18] [19]でうまく活用されている．    
+キネマティックモデルは、柔軟なグラフ表現という利点があるものの、テクスチャや形状の情報を表現するには限界がある。
+
+## 2.2 Planar model 
+* 平面モデル  
+Other than the kinematic model to capture the relations between different body parts, the planar model is used to represent the shape and appearance of a human body as shown in Fig. 2 (b).   
+In the planar model, body parts are usually represented by rectangles approximating the human body contours.    
+One example is the cardboard model [20], which is composed of body part rectangular shapes representing the limbs of a person.     
+One of the early works [21] used the cardboard model in HPE.    
+Another example is Active Shape Model (ASM) [22], which is widely used to capture the full human body graph and the silhouette deformations using principal component analysis [23] [24].   
+
+人体の各部位の関係を表現するには、運動学的モデルのほかに、図2（b）に示すように、平面モデルが用いられる。  
+平面モデルでは，体の各部位は通常，人体の輪郭に近似した長方形で表現される．   
+例えば，ダンボールモデル[20]は，人の手足を表すボディパーツの長方形で構成されている．    
+初期の作品[21]では，このダンボールモデルをHPEで使用していた．   
+もう一つの例は、アクティブ・シェイプ・モデル（ASM）[22]であり、主成分分析を用いて人体の全グラフとシルエットの変形を捉えるために広く使用されている[23][24]。
+
+## 2.3 Volumetric models
+* ボリューメトリックモデル  
+With the increasing interest in 3D human reconstruction, many human body models have been proposed for a wide variety of human body shapes.     
+We briefly discuss several popular 3D human body models used in deep learningbased 3D HPE methods for recovering 3D human mesh.   
+The volumetric model representation is depicted in Fig. 2 (c).   
+
+人体の3次元復元への関心の高まりに伴い、様々な人体形状に対応した多くの人体モデルが提案されている。    
+ここでは、深層学習ベースの3D HPE法で3D人体メッシュを復元する際に使用される、いくつかの一般的な3D人体モデルについて簡単に説明します。  
+図2(c)にボリュームモデルの表現を描いています。  
+
+### SMPL: Skinned Multi-Person Linear model
+Skinned Multi-Person Linear model [25] is a skinned vertex-based model which represents a broad range of human body shapes.    
+SMPL can be modeled with natural pose-dependent deformations exhibiting soft-tissue dynamics.     
+To learn how people deform with pose, there are 1786 high-resolution 3D scans of different subjects of poses with template mesh in SMPL to optimize the blend weights [26], pose-dependent blend shapes, the mean template shape, and the regressor from vertices to joint locations.      
+SMPL is easy to deploy and compatible with existing rendering engines, therefore is widely adopted in 3D HPE methods.
+
+Skinned Multi-Person Linear model [25]は，様々な人体形状を表現することができる，頂点ベースのスキンシップモデルです．   
+SMPLは，軟部組織のダイナミクスを示す自然なポーズ依存の変形をモデル化することができます．    
+人がどのように姿勢に応じて変形するかを知るために，SMPLのテンプレートメッシュを用いた様々な被験者の1786件の高解像度3Dスキャンデータを用いて，ブレンドウェイト[26]，姿勢依存のブレンド形状，平均テンプレート形状，頂点から関節位置への回帰子を最適化した．     
+SMPLは、導入が容易で、既存のレンダリングエンジンとの互換性があるため、3D HPE手法に広く採用されています。
