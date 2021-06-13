@@ -566,3 +566,120 @@ In this section, we first focus on 3D HPE from monocular RGB images and videos, 
 また、データセットは通常、選択された日常動作を伴う屋内環境から収集される。    
 最近の研究 [109] [110] [111]では、クロスデータセット推論によって、偏ったデータセットで訓練されたモデルの一般化が不十分であることが検証されている [112]。   
 このセクションでは、まず、単眼のRGB画像やビデオからの3D HPEに焦点を当て、次に、他のタイプのセンサーに基づく3D HPEをカバーする。
+
+### 4.1 3D HPE from monocular RGB images and videos 単眼のRGB画像・動画からの3D HPE
+The monocular camera is the most widely used sensor for HPE in both 2D and 3D scenarios.    
+Recent progress of deep learning-based 2D HPE from monocular images and videos has enabled researchers to extend their works to 3D HPE.    
+Specifically, deep learning-based 3D HPE methods are divided into two broad categories: single-view 3D HPE and multi-view 3D HPE.  
+
+単眼カメラは、2Dと3Dの両方のシナリオでHPEに最も広く使用されているセンサーです。   
+最近の深層学習を用いた単眼画像や動画からの2D HPEの進展により、研究者たちはその研究を3D HPEにも拡張することができるようになった。   
+具体的には、深層学習ベースの3D HPE手法は、単視点3D HPEと多視点3D HPEの2つに大別される。  
+
+#### 4.1.1 Single-view 3D HPE 単眼の3D HPE
+The reconstruction of 3D human poses from a single view of monocular images and videos is a nontrivial task that suffers from self-occlusions and other object occlusions, depth ambiguities, and insufficient training data.     
+It is a severely ill-posed problem because different 3D human poses can be projected to a similar 2D pose projection.    
+Moreover, for methods that build upon 2D joints, minor localization errors of the 2D body joints can lead to large pose distortion in the 3D space.    
+Compared to the single-person scenario, the multi-person case is more complicated. Thus they are discussed separately in what follows.    
+Single-person 3D HPE approaches can be classified into model-free and model-based categories based on whether they employ a human body model (as listed in Section 2) to estimate 3D human pose or not. 
+
+単眼画像やビデオの単一ビューから人間の3Dポーズを再構築することは、自己包摂や他のオブジェクトのオクルージョン、深度の曖昧さ、不十分なトレーニングデータなどの問題に悩まされる非自明なタスクです。    
+また、異なる3次元の人間のポーズは、類似した2次元のポーズ投影に投影されるため、非常に難しい問題です。   
+さらに、2次元の関節を利用する手法では、2次元の体の関節のわずかな位置の誤差が、3次元空間での大きなポーズの歪みにつながります。   
+一人の場合に比べて、複数人の場合はより複雑になります。そのため、以下では別々に説明します。   
+1人用の3D HPEアプローチは、人間の3Dポーズを推定するために人体モデル（セクション2に記載）を使用するかどうかに基づいて、モデルフリーとモデルベースのカテゴリーに分類されます。  
+
+##### Fig. 5: Single-person 3D HPE frameworks.    一人用の3D HPEフレームワーク。
+(a) Direct estimation approaches directly estimate the 3D human pose from 2D images.    
+(b) 2D to 3D lifting approaches leverage the predicted 2D human pose (intermediate representation) for 3D pose estimation.   
+(c) Model-based methods incorporate parametric body models to recover high-quality 3D human mesh.      
+The 3D pose and shape parameters inferred by the 3D pose and shape network are fed into the model regressor to reconstruct 3D human mesh.    
+Part of the figure is from [113].   
+
+(a) 直接推定アプローチは、2D画像から人間の3Dポーズを直接推定する。   
+(b) 2Dから3Dへのリフティングアプローチは、予測された2Dの人間のポーズ（中間表現）を3Dポーズの推定に利用する。  
+(c) モデルベース手法では、パラメトリックなボディモデルを用いて、高品質な3D人体メッシュを復元する。    
+3Dポーズ・形状ネットワークによって推論された3Dポーズ・形状パラメータは、モデル回帰器に与えられ、3Dヒューマンメッシュを復元する。    
+図の一部は[113]より引用。  
+
+#### Model-free methods.    モデルフリー方式。
+The model-free methods do not employ human body models to reconstruct 3D human representation.     
+These methods can be further divided into two classes: (1) Direct estimation approaches, and (2) 2D to 3D lifting approaches.    
+Direct estimation: As shown in Fig. 5(a), direct estimation methods infer the 3D human pose from 2D images without intermediately estimating 2D pose representation, e.g., [114] [115] [116] [43] [117] [118] [119].    
+One of the early deep learning approaches was proposed by Li and Chan [114].    
+They employed a shallow network to train the body part detection with sliding windows and the pose coordinate regression synchronously.     
+A follow-up approach was proposed by Li et al. [115] where the image-3D pose pairs were used as the network input.    
+The score network can assign high scores to the correct image-3D pose pairs and low scores to other pairs.     
+However, these approaches are highly inefficient because they require multiple forward network inferences.       
+Sun et al. [43] proposed a structure-aware regression approach. Instead of using joint-based representation, they adopted a bonebased representation with more stability. 
+A compositional loss was defined by exploiting 3D bone structure with bonebased representation that encodes long range interactions between the bones.    
+Tekin et al. [116] encoded the structural dependencies between joints by learning a mapping of 3D pose to a high-dimensional latent space.     
+The learned highdimensional pose representation can enforce structural constraints of the 3D pose.    
+Pavlakos et al. [117] [118] introduced  a volumetric representation to convert the highly non-linear 3D coordinate regression problem to a manageable form in a discretized space.     
+The voxel likelihoods for each joint in the volume were predicted by a convolutional network.      
+Ordinal depth relations of human joints were used to alleviate the need for accurate 3D ground truth pose.   
+
+モデルフリー手法とは、人体モデルを使用せずに、人間の3D表現を再構築する手法です。    
+これらの手法は、さらに2つのクラスに分けられます。(1) 直接的な推定アプローチと、(2) 2Dから3Dへのリフティングアプローチです。   
+直接推定。図5（a）に示すように、直接推定法は、2次元のポーズ表現を間欠的に推定することなく、2次元の画像から3次元の人間のポーズを推論するもので、例えば、[114] [115] [116] [43] [117] [118] [119]などがある。   
+初期の深層学習アプローチの1つは，Li and Chan [114]によって提案されたものである．   
+彼らは、浅いネットワークを用いて、スライディングウィンドウを用いた身体部位検出と、ポーズ座標回帰を同期して学習させた。    
+その後、Liら[115]により、画像と3Dポーズのペアをネットワークの入力として使用するアプローチが提案された。   
+スコアネットワークは，正しい画像-3Dポーズのペアには高いスコアを，その他のペアには低いスコアを割り当てることができる．    
+しかし、これらのアプローチは、複数の前方ネットワーク推論を必要とするため、非常に非効率的である。  
+Sunら[43]は、構造を考慮した回帰アプローチを提案した。彼らは、関節ベースの表現の代わりに、より安定性の高い骨ベースの表現を採用しました。   
+骨間の長距離相互作用を符号化する骨ベースの表現を用いて3次元の骨構造を利用することで、組成損失を定義した。   
+Tekinら[116]は、3Dポーズの高次元潜在空間へのマッピングを学習することで、関節間の構造依存性を符号化した。    
+学習された高次元のポーズ表現は、3Dポーズの構造的制約を強化することができる。   
+Pavlakosら[117][118]は、高度に非線形な3次元座標回帰問題を離散化された空間で管理可能な形に変換するために、ボリューム表現を導入した。    
+ボリューム内の各関節のボクセル尤度は、畳み込みネットワークによって予測された。     
+人間の関節の深度関係を利用して、正確な3Dグランドトゥルースポーズの必要性を軽減した。
+
+#### 2D to 3D lifting: 2D→3Dリフティング 
+Motivated by the recent success of 2D HPE, 2D to 3D lifting approaches that infer 3D human pose from the intermediately estimated 2D human pose have become a popular 3D HPE solution as illustrated in Fig. 5(b).   
+Benefiting from the excellent performance of state-of-the-art 2D pose detectors, 2D to 3D lifting approaches generally outperform direct estimation approaches.     
+In the first stage, off-the-shelf 2D HPE models are employed to estimate 2D pose, and then in the second stage 2D to 3D lifting is used to obtain 3D pose.     
+Chen and Ramanan [120] deployed a nearest neighbor matching of the predicted 2D pose and 3D pose from a library.     
+However, 3D HPE could fail when the 3D pose is not conditionally independent of the image given the 2D pose.       
+Martinez et al. [121] proposed a simple but effective fully connected residual network to regress 3D joint locations based on the 2D joint locations.      
+Despite achieving the state-of-the-art results at that time, the method could fail due to reconstruction ambiguity of over-reliance on the 2D pose detector [118].     
+Tekin et al. [122] and Zhou et al. [123] utilized 2D heatmaps instead of 2D pose as intermediate representations for estimating 3D pose.     
+Moreno-Noguer [124] inferred the 3D human pose via distance matrix regression where the distances of 2D and 3D body joints were encoded into two Euclidean Distance Matrices (EDMs).     
+EDMs are invariant to in-plane image rotations and translations, as well as scaling invariance when applying normalization operations.     
+Wang et al. [125] developed a Pairwise Ranking Convolutional Neural Network (PRCNN) to predict the depth ranking of pairwise human joints.     
+Then, a coarseto-fine pose estimator was used to regress the 3D pose from 2D joints and the depth ranking matrix.    
+Jahangiri and Yuille [126], Sharma et al. [127], and Li and Lee [128] first generated multiple diverse 3D pose hypotheses then applied ranking networks to select the best 3D pose.    
+
+2D HPEの成功を受けて、図5（b）に示すように、間欠的に推定された2Dの人物姿勢から3Dの人物姿勢を推論する2D to 3Dリフティングアプローチが、3D HPEのソリューションとして一般的になってきた。  
+最先端の2Dポーズ検出器の優れた性能を利用して、2D to 3Dリフティングアプローチは、一般的に直接推定アプローチよりも優れています。     
+第1段階では、既製の2D HPEモデルを使用して2Dポーズを推定し、第2段階では、2D→3Dリフティングを使用して3Dポーズを取得する。    
+Chen and Ramanan [120]は、予測された2Dポーズとライブラリからの3Dポーズの最近接マッチングを導入した。    
+しかし、3Dポーズが2Dポーズを与えられた画像から条件付きで独立していない場合、3D HPEは失敗する可能性がある。      
+Martinezら[121]は、2Dの関節位置に基づいて3Dの関節位置を回帰させるために、単純だが効果的な完全連結残差ネットワークを提案した。     
+当時の最先端の結果を達成したにもかかわらず、この手法は2Dポーズ検出器に過度に依存した再構成の曖昧さのために失敗する可能性があった[118]。    
+Tekinら[122]およびZhouら[123]は、3Dポーズを推定するための中間表現として、2Dポーズの代わりに2Dヒートマップを利用した。    
+Moreno-Noguer [124]は、2Dと3Dの体のジョイントの距離を2つのユークリッド距離行列（EDM）にエンコードし、距離行列回帰によって人間の3Dポーズを推定した。    
+EDMは，画像の平面内での回転や並進に影響されず，また，正規化操作を行った際のスケーリングにも影響されない．    
+Wangら[125]は，Pairwise Ranking Convolutional Neural Network（PRCNN）を開発し，一対の人間の関節の深度ランキングを予測した．    
+そして、粗い-細かいポーズ推定器を使用して、2Dジョイントと深さランキング行列から3Dポーズを回帰させた。    
+Jahangiri and Yuille [126]、Sharma et al.[127]、Li and Lee [128]は、まず、複数の多様な3Dポーズの仮説を生成し、ランキングネットワークを適用して、最適な3Dポーズを選択した。
+
+Given that a human pose can be represented as a graph where the joints are the nodes and the bones are the edges, Graph Convolutional Networks (GCNs) have been applied to the 2D-to-3D pose lifting problem by showing promising performance [129] [130 [131] [132] [133].     
+Choi et al. [131] proposed Pose2Mesh, which is a GCN-based method to refine the intermediate 3D pose from its PoseNet.      
+With GCN, the MeshNet regresses the 3D coordinates of mesh vertices with graphs constructed from the mesh topology.     
+Ci et al. [129] proposed a generic framework, named Locally Connected Network (LCN), which leverages both fully connected network and GCN to encode the relationship between local joint neighborhoods.      
+LCN can overcome the limitations of GCN that weight sharing scheme harms pose estimation model’s representation ability, and the structure matrix lacks flexibility to support customized node dependence.      
+Zhao et al. [130] also tackled the limitation of the shared weight matrix of convolution filters for all the nodes in GCN.    
+A Semantic-GCN was proposed to investigate the  semantic information and relationship.     
+The semantic graph convolution (SemGConv) operation is used to learn channelwise weights for edges.    
+Both local and global relati onships among nodes are captured since SemGConv and non-local layers are interleaved.      
+
+人間のポーズは，関節をノード，骨をエッジとするグラフとして表現できることから，グラフ畳み込みネットワーク（Graph Convolutional Networks）は，2Dから3Dへのポーズリフティング問題に適用され，有望な性能を示している[129] [130] [131] [132] [133]．    
+Choiら[131]は，PoseNetから中間の3Dポーズを絞り込むGCNベースの手法であるPose2Meshを提案した．     
+GCNでは、MeshNetがメッシュの頂点の3次元座標を、メッシュのトポロジーから構築されたグラフで回帰させる。    
+Ciら[129]は、完全連結ネットワークとGCNの両方を活用して、局所的な結合近傍の関係を符号化するLocally Connected Network (LCN)と呼ばれる汎用フレームワークを提案した。     
+これは、完全連結ネットワークとGCNの両方を利用して、局所的な結合近傍の関係を符号化するものである。LCNは、重み共有スキームがポーズ推定モデルの表現力を損ない、構造行列がカスタマイズされたノード依存性をサポートする柔軟性に欠けるというGCNの限界を克服できる。     
+Zhao et al. [130]も，GCNでは，畳み込みフィルタの重み行列をすべてのノードで共有するという制限に取り組んでいる．    
+意味的な情報や関係を調査するために、Semantic-GCNが提案された。    
+セマンティック・グラフ・コンボルーション(SemGConv)演算を用いて，エッジのチャネルごとの重みを学習する．   
+SemGConvとノンローカル層がインターリーブされているため、ノード間のローカルおよびグローバルな関係が捕捉される。     
