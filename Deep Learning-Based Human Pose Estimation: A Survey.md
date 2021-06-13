@@ -391,3 +391,61 @@ Pfisterら[76]は，オプティカルフローを用いて隣接するフレー
 Luoら[60]は，計算量の多いこれまでのビデオベースの手法とは異なり，異なるフレームからの時間的な幾何学的整合性と依存性を捉えるために，長短期記憶（LSTM）[77]を用いたHPE用のリカレント構造を導入した．    
 この方法では，動画に対するHPEネットワークの学習が高速化される．
 Zhangら[78]は，フレームから空間的・時間的情報を取得するためのキーフレーム提案ネットワークと，動画ベースの姿勢推定を効率的に行うための人物姿勢補間モジュールを導入した．
+
+### 3.2 2D multi-person pose estimation 2D多人数のポーズ推定
+Compared to single-person HPE, multi-person HPE is more difficult and challenging because it needs to figure out the number of people and their positions, and how to group keypoints for different people.    
+In order to solve these problems, multi-person HPE methods can be classified into top-down and bottom-up methods.    
+Top-down methods employ off-the-shelf person detectors to obtain a set of boxes (each corresponding to one person) from the input images, and then apply single-person pose estimators to each person box to generate multi-person poses.     
+Different from top-down methods, bottom-up methods locate all the body joints in one image first and then group them to the corresponding subjects.     
+In the top-down pipeline, the number of people in the input image will directly affect the computing time.     
+The computing speed for bottom-up methods is usually faster than top-down methods since they do not need to detect the pose for each person separately. Fig. 4 shows the general frameworks for 2D multi-person HPE methods.  
+
+1人用のHPEに比べて、多人数用のHPEは、人数とその位置を把握する必要があり、また、異なる人のためのキーポイントをどのようにグループ化するかという問題があり、より難しく、困難です。    
+これらの問題を解決するために、多人数HPEの手法は、トップダウン方式とボトムアップ方式に分類されます。   
+ トップダウン方式は、市販の人物検出器を用いて、入力画像から1人に対応するボックスの集合を得て、各人物ボックスに1人用のポーズ推定器を適用して、複数人用のポーズを生成する方式である。    
+トップダウン方式とは異なり、ボトムアップ方式では、まず1つの画像内のすべての体の関節を見つけ、次にそれらを対応する被験者にグループ化する。    
+トップダウン方式では、入力画像に含まれる人物の数が計算時間に直接影響します。    
+ボトムアップ方式では、各人のポーズを個別に検出する必要がないため、通常、トップダウン方式よりも計算速度が速くなる。図4は、2D多人数HPE法の一般的なフレームワークを示している。  
+
+#### 3.2.1 Top-down pipeline トップダウンパイプライン
+In the top-down pipeline as shown in Fig. 4 (a), there are two important parts: a human body detector to obtain person bounding boxes and a single-person pose estimator to predict the locations of keypoints within these bounding boxes.   
+A line of works focus on designing and improving the modules in HPE networks, e.g., [79] [80] [62] [81] [82] [83] [84] [85] [86] [87].     
+For example, in order to answer the question ”how good could a simple method be” in building an HPE network, Xiao et al. [62] added a few deconvolutional layers in the ResNet (backbone network) to build a simple yet effective structure to produce heatmaps for high-resolution representations.     
+Sun et al. [81] presented a novel High-Resolution Net (HRNet) to learn reliable high resolution representations by connecting mutli-resolution subnetworks in parallel and conducting repeated multi-scale fusions.     
+To improve the accuracy of keypoint localization, Wang et al. [84] introduced a two-stage graph-based and model-agnostic framework, called GraphPCNN. It consists of a localization subnet to obtain rough keypoint locations and a graph pose refinement module to get refined keypoints localization representations.      
+In order to obtain more precise keypoints localization, Cai et al. [86] introduced a multi-stage network with a Residual Steps Network (RSN) module to learn delicate local representations by efficient intra-level feature fusion strategies, and a Pose Refine Machine (PRM) module to find a trade-off between local and global representations in the features.     
+Estimating poses under occlusion and truncation scenes often occurs in multi-person settings since the overlapping of limbs is inevitable.      
+Human detectors may fail in the first step of top-down pipeline due to occlusion or truncation. Therefore, robustness to occlusion or truncation is an important aspect of the multi-person HPE approaches.      
+Towards this goal, Iqbal and Gall [88] built a convolutional pose machinebased pose estimator to estimate the joint candidates.      
+Then they used integer linear programming (ILP) to solve the joint-to-person association problem and obtain the human body poses even in presence of severe occlusions.      
+Fang et al. [89] designed a novel regional multi-person pose estimation (RMPE) approach to improve the performance of HPE in complex scenes.      
+Specifically, RMPE framework has three parts: Symmetric Spatial Transformer Network (to detect single person region within inaccurate bounding box), Parametric Pose Non-Maximum-Suppression (to solve the redundant detection problem), and Pose-Guided Proposals Generator (to augment training data). 
+Papandreou et al. [79] proposed a two-stage architecture, consisting of a Faster R-CNN person detector to create bounding boxes for candidate human bodies and a keypoint estimator to predict the locations of keypoints by using a form of heatmap-offset aggregation.     
+The overall method works well in occluded and cluttered scenes.     
+In order to alleviate the occlusion problem in HPE, Chen et al. [90] presented a Cascade Pyramid Network (CPN) which includes two parts: GlobalNet (a feature pyramid network to predict the invisible keypoints like eyes or hands) and RefineNet (a network to integrate all levels of features from the GlobalNet with a keypoint mining loss).     
+Their results reveal that CPN has a good performance in predicting occluded keypoints.     
+Su et al. [91] designed two modules, the Channel Shuffle Module and the Spatial & Channel-wise Attention Residual Bottleneck, to achieve channel-wise and spatial information enhancement for better multi-person pose estimation under occluded scenes.      
+Qiu et al. [92] developed an Occluded Pose Estimation and Correction (OPEC-Net) module and an occluded pose dataset to solve the occlusion problem in crowd pose estimation.      
+Umer et al. [93] proposed a keypoint correspondence framework to recover missed poses using temporal information of the previous frame in occluded scene.      
+The network is trained using self-supervision in order to improve the pose estimation results in sparsely annotated video datasets.   
+
+図4(a)に示すように、トップダウン・パイプラインには、2つの重要な部分がある。すなわち、人物のバウンディング・ボックスを得るための人体検出器と、このバウンディング・ボックス内のキーポイントの位置を予測するための一人用ポーズ推定器である。    
+例えば、[79] [80] [62] [81] [82] [83] [84] [85] [86] [87]のように、HPEネットワークのモジュールの設計と改善に焦点を当てた研究があります。   
+例えば、Xiaoら[62]は、HPEネットワークを構築する際に「シンプルな手法でどれだけの効果が得られるか」という疑問に答えるために、ResNet（バックボーンネットワーク）にいくつかのデコンボリューション層を追加し、高解像度表現のヒートマップを生成するためのシンプルかつ効果的な構造を構築しました。    
+Sunら[81]は、複数の解像度のサブネットワークを並列に接続し、マルチスケールフュージョンを繰り返し行うことで、信頼性の高い高解像度表現を学習する、新しい高解像度ネット（HRNet）を発表した。    
+キーポイントの定位精度を向上させるために、Wangら[84]は、GraphPCNNと呼ばれる2段階のグラフベースでモデル非依存のフレームワークを導入した。このフレームワークは、大まかなキーポイントの位置を得るための局在化サブネットと、洗練されたキーポイントの局在化表現を得るためのグラフポーズ精密化モジュールで構成されている。     
+Caiら[86]は、より正確なキーポイントの定位を得るために、効率的なイントラレベルの特徴融合戦略によって繊細なローカル表現を学習するResidual Steps Network（RSN）モジュールと、特徴におけるローカル表現とグローバル表現の間のトレードオフを見つけるPose Refine Machine（PRM）モジュールを備えたマルチステージ・ネットワークを導入した。    
+オクルージョンやトランケーションのあるシーンでのポーズの推定は、手足の重なりが避けられないため、多人数の設定でよく起こります。     
+人間の検出器は、トップダウンパイプラインの最初のステップで、オクルージョンやトランケーションのために失敗することがあります。したがって、オクルージョンやトランケーションに対するロバスト性は、多人数向けHPEアプローチの重要な側面です。     
+この目標に向けて、Iqbal and Gall [88]は、関節候補を推定するために、畳み込みポーズマシンベースのポーズ推定器を構築した。     
+そして、整数線形計画法（ILP）を用いて、関節と人の関連付け問題を解決し、深刻なオクルージョンがある場合でも、人体のポーズを得ることができた。     
+Fangら[89]は、複雑なシーンでのHPEの性能を向上させるために、新しい地域別多人数ポーズ推定（Regional Multi-Person Pose Estimation: RMPE）アプローチを設計しました。     
+具体的には、RMPEフレームワークには3つの部分があります。具体的には、RMPEフレームワークは、Symmetric Spatial Transformer Network（不正確なバウンディングボックス内の一人の人物領域を検出する）、Parametric Pose Non-Maximum-Suppression（冗長な検出問題を解決する）、Pose-Guided Proposals Generator（トレーニングデータを補強する）の3つの部分から構成されている。
+Papandreouら[79]は、候補となる人体のバウンディングボックスを作成するFaster R-CNN人物検出器と、ヒートマップ・オフセット集計の形式を用いてキーポイントの位置を予測するキーポイント推定器からなる2段階のアーキテクチャを提案している。     
+この手法は，オクルージョンのあるシーンや散乱したシーンでもうまく機能します．    
+HPEにおけるオクルージョンの問題を軽減するために、Chenら[90]はCascade Pyramid Network (CPN)を発表した。GlobalNet（目や手のような目に見えないキーポイントを予測するための特徴ピラミッドネットワーク）とRefineNet（キーポイントのマイニング損失でGlobalNetからのすべてのレベルの特徴を統合するネットワーク）の2つの部分を含むCascade Pyramid Network（CPN）を発表しました。    
+彼らの結果から、CPNはオクルージョンしたキーポイントを予測するのに良い性能を持っていることが明らかになった。    
+Suら[91]は、チャネルシャッフルモジュールと空間的＆チャネル的注意の残留ボトルネックという2つのモジュールを設計し、チャネル的および空間的な情報強化を実現して、オクルードシーン下でのより優れた複数人のポーズ推定を実現しています。     
+Qiuら[92]は、群集のポーズ推定におけるオクルージョン問題を解決するために、Occluded Pose Estimation and Correction (OPEC-Net)モジュールとオクルージョン・ポーズ・データセットを開発しました。     
+Umerら[93]は、隠蔽されたシーンで前のフレームの時間情報を使ってミスポーズを回復するキーポイント対応フレームワークを提案した。     
+このネットワークは、アノテーションの少ないビデオデータセットにおけるポーズ推定結果を改善するために、自己教師法を用いて学習される。
