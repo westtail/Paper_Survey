@@ -489,4 +489,80 @@ Chengら[103]は、[97]と[81]に基づいて、HRNetの単純な拡張である
 ボトムアップHPE法では、マルチタスク構造も採用されている。     
 Papandreouら[105]は、PersonLabを導入し、ポーズ推定モジュールと人物セグメンテーションモジュールを組み合わせて、キーポイントの検出と関連付けを行っている。      
 PersonLab は、短距離オフセット（ヒートマップの改良のため）、中距離オフセット（キーポイントの予測のため）、長距離オフセット（キーポイントをインスタンスにグループ化するため）から構成されている。     
-Kocabasら[106]は、MultiPoseNetと名付けたポーズ残差ネットを用いたマルチタスク学習モデルを発表した。このモデルは、キーポイントの予測、人物の検出、セマンティックセグメンテーションのタスクをすべて実行できる。     
+Kocabasら[106]は、MultiPoseNetと名付けたポーズ残差ネットを用いたマルチタスク学習モデルを発表した。このモデルは、キーポイントの予測、人物の検出、セマンティックセグメンテーションのタスクをすべて実行できる。 
+
+### 3.3 2D HPE Summary 2D HPEのまとめ
+In summary, the performance of 2D HPE has been significantly improved with the blooming of deep learning techniques.     
+In recent years, deeper and more powerful networks have promoted the performance in 2D singleperson HPE such as DeepPose [36] and Stacked Hourglass Network [38], as well as in 2D multi-person HPE such as AlphaPose [89] and OpenPose [17].    
+Although these works have achieved sufficiently good performance in different 2D HPE scenarios, problems still remain.      
+Regression and body part detection methods have their own advantages and limitations in 2D single-person HPE.      
+Regression methods can learn a nonlinear mapping from input images to keypoint coordinates with an end-toend framework, which offer a fast learning paradigm and a sub-pixel level prediction accuracy.       
+However, they usually give sub-optimal solutions [44] due to the highly nonlinear problem.      
+Body part detection methods, in particular heatmapbased frameworks, are more widely used in 2D HPE since     
+(1) the probabilistic prediction of each pixel in heatmap can improve the accuracy of locating the keypoints; and (2) heatmaps provide richer supervision information by preserving the spatial location information.    
+However, the precision of the predicted keypoints is dependent on the resolution of heatmaps.     
+The computational cost and memory footprint are significantly increased when using high resolution heatmaps.    
+As for the top-down and bottom-up pipelines for 2D multi-person HPE, it is difficult to identify which method is better since both of them are widely used in recent works
+with their strengths and weaknesses.     
+On one hand, topdown pipeline yields better results because it first detects each individual from the image using detection methods, then predicts the locations of keypoints using the single person-based approaches.     
+In this case, the keypoint heatmap estimation within each detected person region is eased as the background is largely removed.     
+On the other hand, bottomup methods are generally faster than top-down methods, because they directly detect all the keypoints and group them into individual poses using keypoint association strategies such as affinity linking [17], associative embedding [97], and pixel-wise keypoint regression [107].      
+There are several challenges in 2D HPE which need to be further addressed in future research.     
+First is the reliable detection of individuals under significant occlusion, e.g., in crowd scenarios.     
+The person detectors in top-down 2D HPE methods may fail to identify the boundaries of largely overlapped human bodies.        
+Similarly, the difficulty of keypoint association is more pronounced for bottom-up approaches in occluded scenes.     
+The second challenge is computation efficiency.      
+Although some methods like OpenPose [17] can achieve near real-time processing on special hardware with moderate computing power (e.g., 22 FPS on a machine with a Nvidia GTX 1080 Ti GPU), it is still difficult to implement the networks on resource-constrained devices.      
+Real-world applications (e.g., online coaching, gaming, AR and VR) require more efficient HPE methods on commercial devices which can bring better interaction experience for users.    
+Another challenge lies in the limited data for rare poses.     
+Although the size of current datasets for 2D HPE is large enough (e.g., COCO dataset [108]) for the normal pose estimation (e.g., standing, walking, running), these datasets have limited training data for unusual poses, e.g., falling.     
+The data imbalance may cause model bias, resulting in poor performance on those poses. It would be useful to develop effective data generation or augmentation techniques to generate extra pose data for training more robust models.    
+
+まとめると、2D HPEの性能は、深層学習技術の開花によって大幅に向上した。    
+近年、より深く、より強力なネットワークが、DeepPose [36]やStacked Hourglass Network [38]などの2D一人用HPEや、AlphaPose [89]やOpenPose [17]などの2D複数人用HPEの性能を向上させました。AlphaPose[89]やOpenPose[17]などの2D多人数HPEでも性能が向上しました。   
+これらの作品は、さまざまな2D HPEシナリオにおいて十分に優れた性能を達成しているが、問題はまだ残っている。     
+回帰法と身体部位検出法は、2Dの1人用HPEにおいて、それぞれ利点と限界があります。     
+回帰法は、入力画像からキーポイント座標への非線形マッピングをエンド・ツー・エンドのフレームワークで学習することができ、高速な学習パラダイムとサブピクセルレベルの予測精度を提供します。      
+しかし，非線形性の高い問題であるため，通常は最適ではない解を与えてしまいます[44]．     
+2D HPEでは、身体部位検出法、特にヒートマップベースのフレームワークがより広く使用されていますが、その理由は以下の通りです。    
+(1) ヒートマップの各ピクセルの確率的な予測は，キーポイントの位置を特定する精度を向上させることができ，(2) ヒートマップは，空間的な位置情報を保持することで，より豊かな監視情報を提供する．   
+しかし，予測されるキーポイントの精度は，ヒートマップの解像度に依存する．    
+高解像度のヒートマップを使用すると，計算コストとメモリフットプリントが大幅に増加する．   
+トップダウン型とボトムアップ型の2つの手法は，それぞれ長所と短所を持ちながらも，最近の研究で広く用いられているため，どちらが優れているかを特定するのは難しい．
+どちらの手法が優れているかを特定することは困難ですが、両者はそれぞれ長所と短所を持っています。    
+一方、トップダウンパイプラインでは、まず画像から各個人を検出法で検出し、次に一人ベースのアプローチでキーポイントの位置を予測するため、より良い結果が得られます。    
+この場合、検出された各人物領域内のキーポイント・ヒートマップの推定は、背景が大幅に除去されるため、容易になります。    
+一方，ボトムアップ法は，親和性リンク[17]，連想埋め込み[97]，ピクセル単位のキーポイント回帰[107]などのキーポイント関連戦略を用いて，すべてのキーポイントを直接検出し，個々のポーズにグループ化するため，一般にトップダウン法よりも高速である．     
+2D HPEには、今後の研究でさらに解決しなければならないいくつかの課題がある。    
+1つ目の課題は、群衆の中などの大きなオクルージョンの下で、個人を確実に検出することである。    
+トップダウン式の2D HPE手法の人物検出器は、大きく重なった人体の境界を識別できないことがある。       
+同様に、オクルージョンがあるシーンでは、ボトムアップ方式ではキーポイントの関連付けが難しくなります。    
+2つ目の課題は、計算効率です。     
+OpenPose[17]のように、中程度の計算能力を持つ特殊なハードウェアでほぼリアルタイム処理を実現できる手法もあるが（例：Nvidia GTX 1080 Ti GPUを搭載したマシンで22 FPS）、リソースに制約のあるデバイスにネットワークを実装することは依然として困難である。     
+現実世界のアプリケーション（例：オンラインコーチング、ゲーム、ARやVR）では、ユーザーにより良いインタラクション体験をもたらすことができる、商用デバイス上でのより効率的なHPE手法が必要です。   
+もう一つの課題は、珍しいポーズのデータが限られていることです。    
+2D HPE用の現在のデータセットは、通常のポーズ推定（例：立っている、歩いている、走っている）には十分なサイズ（例：COCOデータセット[108]）であるが、これらのデータセットでは、落下などの珍しいポーズのトレーニングデータが限られている。    
+このようなデータの不均衡がモデルの偏りを引き起こし、結果的にこれらのポーズでのパフォーマンスが低下する可能性がある。よりロバストなモデルを学習するために、追加のポーズデータを生成するための効果的なデータ生成または増強技術を開発することは有益である。   
+
+## 4 3D HUMAN POSE ESTIMATION 3D人体姿勢推定
+3D HPE, which aims to predict locations of body joints in 3D space, has attracted much interest in recent years since it can provide extensive 3D structure information related to the human body.      
+It can be applied to various applications (e.g., 3D movie and animation industries, virtual reality, and online 3D action prediction).       
+Although significant improvements have recently been achieved in 2D HPE, 3D HPE still remains as a challenging task.     
+Most existing research works tackle 3D HPE from monocular images or videos, which is an ill-posed and inverse problem due to projection of 3D to 2D where one dimension is lost.     
+When multiple viewpoints are available or other sensors such as IMU and LiDAR are deployed, 3D HPE can be a well-posed problem employing information fusion techniques.     
+Another limitation is that deep learning models are data-hungry and sensitive to the data collection environment.     
+Unlike 2D human datasets where accurate 2D pose annotation can be easily obtained, collecting accurate 3D pose annotation is time-consuming and manual labeling is not practical.     
+Also, datasets are usually collected from indoor environments with selected daily actions.     
+Recent works [109] [110] [111] have validated the poor generalization of models trained with biased datasets by cross-dataset inference [112].    
+In this section, we first focus on 3D HPE from monocular RGB images and videos, and then cover 3D HPE based on other types of sensors.  
+
+3D HPEは、3D空間における体の関節の位置を予測することを目的としており、人体に関する広範な3D構造情報を提供できることから、近年注目を集めています。     
+3D HPEは、3D映画やアニメーション、バーチャルリアリティ、オンライン3Dアクション予測など、様々な用途に応用することができます。      
+最近、2D HPEでは大幅な改善が達成されましたが、3D HPEはまだ困難な課題として残っています。    
+既存の研究では、単眼画像やビデオからの3D HPEに取り組んでいますが、これは、3Dから2Dへの投影により1つの次元が失われるため、逆問題となります。    
+複数の視点が利用可能であったり、IMUやLiDARなどの他のセンサーが配備されている場合、3D HPEは情報融合技術を用いた正解の問題となります。    
+もう一つの限界は、深層学習モデルがデータを必要とし、データ収集環境に敏感であることです。    
+正確な2Dポーズアノテーションが簡単に得られる2Dヒューマンデータセットとは異なり、正確な3Dポーズアノテーションの収集には時間がかかり、手動でのラベリングは現実的ではありません。    
+また、データセットは通常、選択された日常動作を伴う屋内環境から収集される。    
+最近の研究 [109] [110] [111]では、クロスデータセット推論によって、偏ったデータセットで訓練されたモデルの一般化が不十分であることが検証されている [112]。   
+このセクションでは、まず、単眼のRGB画像やビデオからの3D HPEに焦点を当て、次に、他のタイプのセンサーに基づく3D HPEをカバーする。
