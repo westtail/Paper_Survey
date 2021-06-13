@@ -258,3 +258,67 @@ GHUMとGHUML(ite)は、統計的かつ関節的な3D人体形状とポーズを�
 GHUMは中程度の解像度のバージョン、GHUMLは低解像度のバージョンです。   
 GHUMとGHUMLは、高解像度のフルボディスキャン（彼らのデータセットでは60,000以上の多様な人間の構成）を用いて、深層変分オートエンコーダーのフレームワークで学習されます。     
 GHUMとGHUMLは，高解像度のフルボディスキャン（同社のデータセットでは6万人以上の多様な人間の構成）を用いて，深層変分オートエンコーダーの枠組みで学習されており，非線形形状空間，ポーズ空間の変形補正，スケルトンの関節中心の推定，ブレンドスキニング機能など，多数のコンポーネントを推論することができる[26]
+
+## 3 2D HUMAN POSE ESTIMATION 2次元人体姿勢推定
+2D HPE methods estimate the 2D position or spatial location of human body keypoints from images or videos.     
+Traditional 2D HPE methods adopt different hand-crafted feature extraction techniques [33] [34] for body parts, and these early works describe human body as a stick figure to obtain global pose structures.    
+Recently, deep learning-based approaches have achieved a major breakthrough in HPE by improving the performance significantly. 
+In the following, we review deep learning-based 2D HPE methods with respect to singleperson and multi-person scenarios.    
+
+2D HPE法は、画像や動画から人体のキーポイントの2D位置または空間的な位置を推定する。    
+従来の2D HPE手法では、体のパーツに対して異なる手作りの特徴抽出技術[33][34]を採用しており、これらの初期の作品では、グローバルなポーズ構造を得るために人体を棒人間として記述している。   
+近年、深層学習に基づくアプローチは、性能を大幅に向上させることで、HPEにおいて大きなブレークスルーを達成している。
+以下では、深層学習ベースの2D HPE手法を、1人用と複数人用のシナリオに関してレビューする。
+
+### 3.1 2D single-person pose estimation 2D一人称のポーズ推定
+2D single-person pose estimation is used to localize human body joint positions when the input is a single-person image.    
+If there are more than one person, the input image is cropped first so that there is only one person in each cropped patch (or sub-image).     
+This process can be achieved automatically by an upper-body detector [35] or a full-body detector [3].     
+In general, there are two categories for single-person pipelines that employ deep learning techniques: regression methods and body part detection methods.    
+Regression methods apply an end-to-end framework to learn a mapping from the input image to body joints or parameters of human body models [36].      
+The goal of body part detection methods is to predict approximate locations of body parts and joints [37] [38], which are normally supervised by heatmaps representation [39] [40].      
+Heatmap-based frameworks are now widely used in 2D HPE tasks.      
+The general frameworks of 2D single-person HPE methods are depicted in Fig. 3.
+
+2D一人称ポーズ推定は、入力が一人の人物の画像である場合に、人体の関節位置を特定するために使用されます。   
+複数の人物がいる場合は、まず入力画像が切り取られ、切り取られた各パッチ（またはサブ画像）に1人の人物だけが写るようにする。    
+この処理は，上半身の検出器[35]や全身の検出器[3]によって自動的に行うことができる．    
+一般的に、深層学習技術を採用した1人用パイプラインには、回帰法と身体部位検出法の2つのカテゴリーがあります。   
+回帰法は、エンド・ツー・エンドのフレームワークを適用して、入力画像から体の関節や人体モデルのパラメータへのマッピングを学習するものである[36]。     
+身体部位検出法の目的は、身体部位や関節のおおよその位置を予測することであり[37][38]、通常はヒートマップ表現によって監督される[39][40]。     
+ヒートマップベースのフレームワークは、現在、2D HPEタスクで広く使用されている。     
+2D一人用HPE手法の一般的なフレームワークは、図3に示されている。
+
+
+### 3.1.1 Regression methods 回帰法
+There are many works based on the regression framework (e.g., [36] [41] [42] [43] [44] [45] [46] [47] [48] [49]) to predict joint coordinates from images as shown in Fig. 3    
+(a). Using AlexNet [1] as the backbone, Toshev and Szegedy [36] proposed a cascaded deep neural network regressor named DeepPose to learn keypoints from images.     
+Due to the impressive performance of DeepPose, the research paradigm of HPE began to shift from classic approaches to deep learning, in particular convolutional neural networks (CNNs).      
+Based on GoogLeNet [50], Carreira et al. [42] proposed an Iterative Error Feedback (IEF) network, which is a self-correcting model to progressively change an initial solution by injecting the prediction error back to the input space.     
+Sun et al. [43] introduced a structure-aware regression method called ”compositional pose regression” based on ResNet-50 [51].    
+This method adopts a re-parameterized and bone-based representation that contains human body information and pose structure, instead of the traditional joint-based representation.      
+Luvizon et al. [44] proposed an end-to-end regression approach for HPE using soft-argmax function to convert feature maps into joint coordinates in a fully differentiable framework.     
+A good feature that encodes rich pose information is critical for regression-based methods.      
+One popular strategy to learn better feature representation is multi-task learning [52].    
+By sharing representations between related tasks (e.g., pose estimation and pose-based action recognition), the model can generalize better on the original task (pose estimation).     
+Following this direction, Li et al. [46] proposed a heterogeneous multi-task framework that consists of two tasks: predicting joints coordinates from full images by building a regressor and detecting body parts from image patches using a sliding window.     
+Fan et al. [47] proposed a Dual-Source (i.e., image patches and full images) Deep Convolutional Neural Network (DS-CNN) for two tasks: joint detection which determines whether a patch contains a body joint, and joint localization which finds the exact location of the joint in the patch. 
+Each task corresponds to a loss function, and the combination of two tasks leads to improved results.     
+Luvizon et al. [48] learned a multi-task network to jointly handle 2D/3D pose estimation and action recognition from video sequences. 
+
+回帰法のフレームワークを用いて，図3に示すように，画像から関節の座標を予測する研究は数多く存在する（例えば，[36] [41] [42] [43] [44] [45] [46] [47] [48] [49]）．   
+(a). Toshev and Szegedy [36]は，AlexNet [1]をバックボーンとして，DeepPoseという名前のカスケード接続された深層ニューラルネットワークを用いて，画像からキーポイントを学習することを提案した．    
+DeepPoseの優れた性能により、HPEの研究パラダイムは、古典的なアプローチから深層学習、特に畳み込みニューラルネットワーク（CNN）へと移行し始めました。     
+Carreiraら[42]は、GoogLeNet[50]をベースに、予測誤差を入力空間に戻すことで初期解を徐々に変化させる自己修正モデルであるIterative Error Feedback（IEF）ネットワークを提案しました。    
+Sunら[43]は，ResNet-50[51]をベースにした "compositional pose regression "と呼ばれる構造を考慮した回帰手法を導入した．   
+この手法では、従来の関節ベースの表現の代わりに、人体情報とポーズ構造を含む再パラメータ化された骨ベースの表現を採用している。     
+Luvizonら[44]は、完全に微分可能なフレームワークで、特徴マップを関節座標に変換するために、soft-argmax関数を用いたHPEのエンド・ツー・エンド回帰アプローチを提案した。    
+豊富なポーズ情報を符号化する優れた特徴は、回帰ベースの手法にとって重要である。     
+より良い特徴表現を学習するための一般的な戦略の1つは、マルチタスク学習である[52]。   
+関連するタスク（例えば、ポーズ推定とポーズベースの行動認識）の間で表現を共有することで、モデルは元のタスク（ポーズ推定）でよりよく一般化することができる。    
+この方向性に沿って、Liら[46]は、リグレッサを構築してフル画像から関節座標を予測するタスクと、スライディングウィンドウを用いて画像パッチからボディパーツを検出するタスクの2つから構成されるヘテロジニアス・マルチタスク・フレームワークを提案した。    
+Fanら[47]は，画像パッチとフル画像の2つのソースからなるDual-Source Deep Convolutional Neural Network (DS-CNN)を提案しており，パッチに体の関節が含まれているかどうかを判定する関節検出と，パッチ内の関節の正確な位置を求める関節局在化の2つのタスクを行っている．
+それぞれのタスクには損失関数が対応しており、2つのタスクを組み合わせることで、より良い結果が得られる。    
+Luvizonら[48]は、2D/3Dポーズ推定とビデオシーケンスからのアクション認識を共同で処理するマルチタスクネットワークを学習した。  
+
+
