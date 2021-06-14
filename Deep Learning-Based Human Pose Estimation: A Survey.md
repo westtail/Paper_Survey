@@ -895,3 +895,21 @@ Zhenら[187]は、奥行きを考慮したパーツ・アソシエーション�
 Mehtaら[198]は、精度に関わらず、可視化されたボディジョイントの中間的な3Dポーズを素早く推定する。    
 そして、学習したポーズプライアとグローバルコンテキストを用いて、オクルージョンしたジョイントを推論することで、完成した3Dポーズを再構築する。    
 最終的な3Dポーズは、時間的なコヒーレンスを適用し、運動学的な骨格モデルをフィットさせることで洗練された。   
+
+#### Comparison of top-down and bottom-up approaches. トップダウン・アプローチとボトムアップ・アプローチの比較
+Top-down approaches usually achieve promising results by relying on the state-of-the-art person detection methods and single-person pose estimation methods.     
+But the computational complexity and the inference time may become excessive with the increase in the number of humans, especially in crowded scenes.      
+Moreover, since top-down approaches first detect the bounding box for each person, global information in the scene may get neglected.      
+The estimated depth of cropped region may be inconsistent with the actual depth ordering and the predicted human bodies may be placed in overlapping positions. On the contrary, the bottom-up approaches enjoy linear computation and time complexity.      
+However, if the goal is to recover 3D body mesh, it is not straightforward for the bottom-up approaches to reconstruct human body meshes.       
+For top-down approaches, after detecting each individual person, human body mesh of each person can be easily recovered by incorporating the model-based 3D single-person HPE estimator.      
+While for the bottom-up approaches, additional model regressor module is needed to reconstruct human body meshes based on the final 3D poses.       
+
+トップダウン・アプローチは、通常、最先端の人物検出手法や一人の人物のポーズ推定手法に頼ることで、有望な結果を得ることができます。          
+しかし、特に混雑したシーンでは、人間の数が増えるにつれて、計算量や推論時間が過大になる可能性があります。     
+また、トップダウン方式では、まず各人物のバウンディングボックスを検出するため、シーンのグローバルな情報が無視されてしまう可能性があります。     
+また，切り取られた領域の奥行きの推定値が実際の奥行きの順序と一致しなかったり，予測された人体が重複して配置されたりすることがあります．一方、ボトムアップ方式では、計算量と時間が直線的になります。     
+しかし、3Dボディメッシュの復元を目的とした場合、ボトムアップアプローチで人体メッシュを復元することは容易ではありません。      
+トップダウン型のアプローチでは、個々の人物を検出した後、モデルベースの3D一人用HPE推定器を組み込むことで、各人物の人体メッシュを容易に復元することができます。     
+一方、ボトムアップ型のアプローチでは、最終的な3Dポーズに基づいて人体メッシュを再構成するために、追加のモデル回帰モジュールが必要となります。     
+
