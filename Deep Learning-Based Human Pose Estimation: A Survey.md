@@ -672,7 +672,27 @@ LCN can overcome the limitations of GCN that weight sharing scheme harms pose es
 Zhao et al. [130] also tackled the limitation of the shared weight matrix of convolution filters for all the nodes in GCN.    
 A Semantic-GCN was proposed to investigate the  semantic information and relationship.     
 The semantic graph convolution (SemGConv) operation is used to learn channelwise weights for edges.    
-Both local and global relati onships among nodes are captured since SemGConv and non-local layers are interleaved.      
+Both local and global relati onships among nodes are captured since SemGConv and non-local layers are interleaved.    
+3D HPE datasets are usually collected from controlled environments with selected daily motions.     
+It is difficult to obtain the 3D pose annotations for in-the-wild data.     
+Thus 3D HPE for in-the-wild data with unusual poses and occlusions is still a challenge.     
+To this end, a group of 2D to 3D lifting methods pay attention to estimate the 3D human pose from in-the-wild images without 3D pose annotations such as [109] [134] [135] [110] [111].        
+Zhou et al. [109] proposed a weakly supervised transfer learning method that uses 2D annotations of in-the-wild images as weak labels. 3D pose estimation module was connected with intermediate layers of the 2D pose estimation module.      
+For in-the-wild images, 2D pose estimation module performed a supervised 2D heatmap regression and a 3D bone length constraint induced loss was applied in the weakly supervised 3D pose estimation module.     
+Habibie et al. [134] tailored a projection loss to refine the 3D human pose without 3D annotation.      
+A 3D-2D projection module was designed to estimate the 2D body joint locations with the predicted 3D pose from earlier network layer.     
+The projection loss was used to update the 3D human pose without requiring 3D annotations.     
+nspired by [136], Chen et al. [135] proposed an unsupervised lifting network based on the closure and invariance lifting properties with a geometric self-consistency loss for the lift-reproject-lift process.    
+Closure means for a lifted 3D skeleton, after random rotation and re-projection, the resulting 2D skeleton will lie within the distribution of valid 2D pose. Invariance means when changing the viewpoint of 2D projection from a 3D skeleton, the re-lifted 3D skeleton should be the same.     
+Instead of estimating 3D human pose from monocular images, videos can provide temporal information to improve accuracy and robustness of 3D HPE, e.g., [137] [138][139] [140] [141] [142] [143] [144].     
+Hossain and Little [145] proposed a recurrent neural network using a Long Short-Term Memory (LSTM) unit with shortcut connections to exploit temporal information from sequences of human pose.      
+Their method exploits the past events in a sequence-tosequence network to predict temporally consistent 3D pose.     
+Noticing that the complementary property between spatial constraints and temporal correlations is usually ignored by prior work, Dabral et al. [139], Cai et al. [142], and Li et al. [146] exploited the spatial-temporal relationships and constraints (e.g., bone-length constraint and left-right symmetry constraint) to improve 3D HPE performance from sequential frames.     
+Pavllo et al. [140] proposed a temporal convolution network to estimate 3D pose over 2D keypoints from consecutive 2D sequences.      
+However, their method is based on the assumption that prediction errors are temporally non-continuous and independent, which may not hold in presence of occlusions [141].      
+Based on [140], Chen et al. [147] added bone direction module and bone length module to ensure human anatomy temporal consistency across video frames, while Liu et al. [148] utilized the attention mechanism to recognize significant frames and model longrange dependencies in large temporal receptive fields.      
+Zeng et al. [133] employed the split-and-recombine strategy to address the rare and unseen pose problem.      
+The human body is first split into local regions for processing through separate temporal convolutional network branches, then the lowdimensional global context obtained from each branch is combined to maintain global coherence.     
 
 人間のポーズは，関節をノード，骨をエッジとするグラフとして表現できることから，グラフ畳み込みネットワーク（Graph Convolutional Networks）は，2Dから3Dへのポーズリフティング問題に適用され，有望な性能を示している[129] [130] [131] [132] [133]．    
 Choiら[131]は，PoseNetから中間の3Dポーズを絞り込むGCNベースの手法であるPose2Meshを提案した．     
@@ -682,4 +702,24 @@ Ciら[129]は、完全連結ネットワークとGCNの両方を活用して、�
 Zhao et al. [130]も，GCNでは，畳み込みフィルタの重み行列をすべてのノードで共有するという制限に取り組んでいる．    
 意味的な情報や関係を調査するために、Semantic-GCNが提案された。    
 セマンティック・グラフ・コンボルーション(SemGConv)演算を用いて，エッジのチャネルごとの重みを学習する．   
-SemGConvとノンローカル層がインターリーブされているため、ノード間のローカルおよびグローバルな関係が捕捉される。     
+SemGConvとノンローカル層がインターリーブされているため、ノード間のローカルおよびグローバルな関係が捕捉される。    
+3D HPEデータセットは、通常、管理された環境で、選択された日常的な動作を伴って収集されます。    
+野生のデータの3Dポーズアノテーションを取得することは困難です。    
+そのため、通常とは異なるポーズやオクルージョンを持つ自然界のデータに対する3D HPEは、まだ課題となっている。    
+この目的のために、2Dから3Dへのリフティング手法のグループは、3Dポーズアノテーションのない野性の画像から人間の3Dポーズを推定することに注目している[109] [134] [135] [110] [111]。        
+Zhouら[109]は、野生の画像の2Dアノテーションを弱いラベルとして利用する弱教師付き伝達学習法を提案している。3Dポーズ推定モジュールは、2Dポーズ推定モジュールの中間層に接続されている。      
+野生の画像に対して、2Dポーズ推定モジュールは、教師ありの2Dヒートマップ回帰を行い、弱い教師ありの3Dポーズ推定モジュールでは、3D骨の長さの制約による損失を適用した。    
+Habibieら[134]は、3Dアノテーションがなくても、人間の3Dポーズを洗練させるために投影損失を調整した。     
+3D-2D 投影モジュールは、以前のネットワーク層から予測された 3D ポーズを用いて、2D の身体関節位置を推定するように設計された。    
+投影損失は、3Dアノテーションを必要とせずに人間の3Dポーズを更新するために使用された。    
+Chenら[135]は、[136]にヒントを得て、closureとinvarianceのリフティング特性に基づいて、lift-reproject-liftプロセスのための幾何学的自己整合性損失を用いた、教師なしリフティングネットワークを提案した。   
+閉鎖性とは、リフティングされた3Dスケルトンに対して、ランダムな回転と再投影を行った後、結果として得られる2Dスケルトンが有効な2Dポーズの分布内に収まることを意味する。不変性（Invariance）とは、3Dスケルトンからの2D投影の視点を変えても、再リフトされた3Dスケルトンは同じであることを意味する。   
+単眼画像から人間の3Dポーズを推定する代わりに、動画から時間的な情報を得ることで、3D HPEの精度とロバスト性を向上させることができる。    
+HossainとLittle[145]は，人間のポーズのシーケンスから時間情報を利用するために，ショートカット接続を持つLSTM（Long Short-Term Memory）ユニットを用いたリカレント・ニューラル・ネットワークを提案した．     
+彼らの手法は、シーケンス-シーケンスネットワークの過去のイベントを利用して、時間的に一貫した3Dポーズを予測する。    
+Dabralら[139]、Caiら[142]、Liら[146]は、空間的・時間的な関係と制約（骨の長さの制約や左右の対称性の制約など）を利用して、連続したフレームからの3D HPEの性能を向上させている。    
+Pavlloら[140]は，連続する2Dシーケンスから2Dキーポイント上の3Dポーズを推定するために，時間的な畳み込みネットワークを提案した．     
+しかし、彼らの方法は、予測誤差が時間的に非連続で独立しているという仮定に基づいており、これはオクルージョンの存在下では成立しない可能性がある[141]。     
+Chenら[147]は、[140]に基づいて、ビデオフレーム間の人体解剖学的な時間的一貫性を確保するために、骨の方向モジュールと骨の長さモジュールを追加し、Liuら[148]は、有意なフレームを認識し、大きな時間的受容野における長距離依存性をモデル化するために、注意メカニズムを利用しています。     
+Zengら[133]は、希少で見たことのないポーズの問題を解決するために、分割・再結合戦略を採用した。     
+これは、人体を局所的な領域に分割して、時間的に別の畳み込みネットワークブランチで処理し、その後、各ブランチから得られた低次元のグローバルコンテキストを結合して、グローバルなコヒーレンスを維持するというものである。    
