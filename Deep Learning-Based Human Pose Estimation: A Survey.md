@@ -805,3 +805,93 @@ Chenら[182]は，オクルージョンを生成するために Cylinder Man Mod
 Xiangら[183]は、Adamモデル[30]を利用して、3Dモーションを再構成した。また、3D Part Orientation Fields（POF）と呼ばれる3D人体表現を導入し、2D空間における人体パーツの3Dオリエンテーションを符号化した。   
 Wangら[185]は、骨の長さと関節の角度を設定することで、骨のモデリングとアイデンティティ特有のバリエーションを切り離す、新しいBone-level Skinned Model of human meshを発表した。     
 Fisch and Clark [186]は、6D HPE のためにヨー、ピッチ、ロールを含む完全な 3 軸関節回転を計算できるオリエンテーション・キーポイント・モデルを導入した。
+
+ 
+### Multi-person 3D HPE 複数人での3D HPE
+Fig. 6: Illustration of the multi-person 3D HPE frameworks.     
+(a) Top-Down approaches first detect single-person regions by human detection network.     
+For each single-person region, individual 3D pose can be estimated by 3D pose network.      
+Then all 3D poses are aligned to the world coordinate.      
+(b) Bottom-Up approaches first estimate all body joints and depth maps, then associate body parts to each person according to the root depth and part relative depth.    
+Part of the figure is from [187].     
+
+図6：複数人対応の3D HPEフレームワークの説明。    
+(a) トップダウン型のアプローチでは、まず人物検出ネットワークによって一人の人物の領域を検出します。    
+各一人の人物領域に対して、3Dポーズネットワークにより個々の3Dポーズが推定されます。     
+そして、すべての3Dポーズをワールド座標に合わせます。     
+(b) ボトムアップアプローチでは、まず、すべてのボディジョイントとデプスマップを推定し、次に、ルートデプスとパーツ相対デプスに従って、ボディパーツを各人に関連付ける。   
+図の一部は[187]からの引用である。  
+
+For 3D multi-person HPE from monocular RGB images or videos, similar categories as 2D multi-person HPE are noted here: top-down approaches and bottom-up approaches as shown in Fig. 6 (a) and Fig. 6 (b), respectively. 
+The comparison between 2D top-down and bottom-up approaches in Section 3.2 is also applicable for the 3D case.
+単眼のRGB画像や動画からの3D多人数HPEについても、2D多人数HPEと同様に、図6(a)に示すようにトップダウン型、図6(b)に示すようにボトムアップ型のアプローチがあります。
+なお、3.2節のトップダウン方式とボトムアップ方式の比較は、3Dの場合にも当てはまります。
+
+#### Top-down approaches.    トップダウン方式。   
+Top-down approaches of 3D multi-person HPE first perform human detection to detect each individual person.      
+Then for each detected person, absolute root (center joint of the human) coordinate and 3D root-relative pose are estimated by 3D pose networks.      
+Based on the absolute root coordinate of each person and their rootrelative pose, all poses are aligned to the world coordinate.     
+Rogez et al. [188] localized candidate regions of each person to generate potential poses, and used a regressor to jointly refine the pose proposals.      
+This localization-classificationregression method, named LCR-Net, performed well on the controlled environment datasets but could not generalize well to in-the-wild images.     
+To address this issue, Rogez et al. [189] proposed LCR-Net++ by using synthetic data augmentation for the training data to improve performance.      
+Zanfir et al. [190] added semantic segmentation to the 3D multiperson HPE module with scene constraints.      
+Additionally, the 3D temporal assignment problem was tackled by the Hungarian matching method for video-based multi-person 3D HPE.       
+Moon et al. [191] introduced a camera distanceaware approach that the cropped human images were fed into their developed RootNet to estimate the camera-centered coordinates of human body’s roots.      
+Then the root-relative 3D pose of each cropped human was estimated by the proposed PoseNet.       
+Benzine et al. [192] proposed a single-shot approach named PandaNet (Pose estimAtioN and Detection Anchorbased Network).      
+A low-resolution anchor-based representation was introduced to avoid the occlusion problem.      
+A poseaware anchor selection module was developed to address the overlapping problem by removing the ambiguous anchors.      
+An automatic weighting of losses associated with different scales was used to handle the imbalance issue of different sizes of people.      
+Li et al. [193] tackled the lack of global information in the top-down approaches.     
+They adopted a Hierarchical Multi-person Ordinal Relations method to leverage body level semantic and global consistency for encoding the interaction information hierarchically.
+
+3DマルチパーソンHPEのトップダウンアプローチでは、まず人物検出を行い、個々の人物を検出します。     
+次に、検出された各人物について、3Dポーズネットワークにより、絶対根元（人物の中心関節）座標と3D根元-相対ポーズが推定されます。     
+各人物の絶対根元座標と根元相対ポーズに基づいて、すべてのポーズをワールド座標に整列させる。    
+Rogezら[188]は，各人物の候補領域をローカライズしてポーズの候補を生成し，回帰器を用いてポーズ案を共同で精査した．     
+LCR-Net と名付けられたこの局在化-分類-回帰法は、制御された環境のデータセットでは良好な性能を示したが、野生の画像にはうまく一般化できなかった。    
+この問題を解決するために、Rogezら[189]は、性能を向上させるために、学習データに合成データの補強を用いるLCR-Net++を提案した。     
+Zanfirら[190]は、シーン制約のある3D多人数HPEモジュールにセマンティックセグメンテーションを追加した。     
+さらに、ビデオベースの多人数3D HPEのためのハンガリアンマッチング法により、3Dの時間的割り当て問題に取り組んだ。      
+Moonら[191]は、カメラ距離を考慮したアプローチを導入しています。これは、切り取られた人間の画像を、彼らが開発したRootNetに供給し、人体の根元のカメラ中心座標を推定するというものです。     
+そして、提案されたPoseNetによって、切り取られた人間の根元に関連した3Dポーズが推定されました。      
+Benzineら[192]は、PandaNet（Pose estimAtioN and Detection Anchorbased Network）と名付けたシングルショットのアプローチを提案した。     
+オクルージョンの問題を回避するために，低解像度のアンカーベースの表現を導入した．     
+曖昧なアンカーを除去することで重複問題を解決するために、ポーズを考慮したアンカー選択モジュールを開発しました。     
+また，異なるスケールに関連する損失を自動的に重み付けすることで，異なるサイズの人の不均衡問題を処理しました．     
+Li et al. [193] は，トップダウンアプローチにおけるグローバルな情報の欠如に取り組んだ．    
+彼らは、階層的多人数順序関係法を採用し、身体レベルのセマンティックとグローバルな一貫性を活用して、インタラクション情報を階層的に符号化した。
+
+#### Bottom-up approaches.    ボトムアップ・アプローチ
+In contrast to the top-down approaches, bottom-up approaches first produce all body joint locations and depth maps, then associate body parts to each person according to the root depth and part relative depth.       
+A key challenge of bottom-up approaches is how to group human body joints belonging to each person.      
+Zanfir et al. [194] formulated the person grouping problem as a binary integer programming (BIP) problem.      
+A limb scoring module was used to estimate candidate kinematic connections of detected joints and a skeleton grouping module assembled limbs into skeletons by solving the BIP problem.       
+Nie et al. [101] proposed a Single-stage multi-person Pose Machine (SPM) to define the unique identity root joint for each person.    
+The body joints were aligned to each root joint by using the dense displacement maps.       
+However, this method is limited in that only paired 2D images and 3D pose annotations could be used for supervised learning.      
+Without paired 2D images and 3D pose annotations, Kundu et al. [195] proposed a frozen network to exploit the shared latent space between two diverse modalities under a practical deployment paradigm such that the learning could be cast as a cross-model alignment problem.    
+Fabbri et al. [196] developed a distancebased heuristic for linking joints in a multi-person setting.       
+Specifically, starting from detected heads (i.e., the joint with the highest confidence), the remaining joints are connected by selecting the closest ones in terms of 3D Euclidean distance.     
+Another challenge of bottom-up approaches is occlusion.      
+To cope with this challenge, Metha et al. [197] developed an Occlusion-Robust Pose-Maps (ORPM) approach to incorporate redundancy into the location-maps formulation, which facilitates person association in the heatmaps especially for occluded scenes.     
+Zhen et al. [187] leveraged a depth-aware part association algorithm to assign joints to individuals by reasoning about inter-person occlusion and bone-length constraints.      
+Mehta et al. [198] quickly inferred intermediate 3D pose of visible body joints regardless of the accuracy.     
+Then the completed 3D pose is reconstructed by inferring occluded joints using learned pose priors and global context.     
+The final 3D pose was refined by applying temporal coherence and fitting the kinematic skeletal model.    
+トップダウンアプローチとは対照的に、ボトムアップアプローチでは、まず、すべての身体関節の位置と深度マップを作成し、次に、根元の深度とパーツの相対的な深度に応じて、各人に身体パーツを関連付けます。      
+ボトムアップ・アプローチの重要な課題は、各人に属する人体の関節をどのようにグループ化するかである。     
+Zanfirら[194]は、人物グルーピング問題を二元整数計画（BIP）問題として定式化しました。     
+肢体スコアリングモジュールは、検出された関節の運動学的接続の候補を推定するために使用され、スケルトングルーピングモジュールは、BIP問題を解くことによって肢体をスケルトンに組み立てる。      
+Nie et al. [101]は、各人に固有のアイデンティティを持つルートジョイントを定義するために、Single-stage multi-person Pose Machine (SPM)を提案した。   
+体の関節は，密な変位マップを用いて，各根元関節に整列させた．      
+しかし、この方法では、ペアの2D画像と3Dポーズのアノテーションのみが教師付き学習に使用できるという制限があります。     
+Kunduら[195]は、ペアの2D画像と3Dポーズのアノテーションがなくても、2つの多様なモダリティ間の共有された潜在的な空間を利用するために、実用的な展開パラダイムの下で、モデル間のアライメント問題として学習を行うことができるフローズンネットワークを提案した。   
+Fabbriら[196]は、複数の人がいる環境で関節を連結するための距離ベースのヒューリスティックを開発した。      
+具体的には、検出された頭部（すなわち、最も信頼性の高い関節）から始まり、残りの関節は、3Dユークリッド距離の観点から最も近いものを選択して接続される。    
+ボトムアップアプローチのもう一つの課題は、オクルージョンです。     
+この課題に対処するため、Methaら[197]は、Occlusion-Robust Pose-Maps (ORPM)アプローチを開発し、冗長性をロケーション・マップの定式化に組み込むことで、特にオクルージョンのあるシーンでのヒートマップにおける人物の関連付けを容易にしました。    
+Zhenら[187]は、奥行きを考慮したパーツ・アソシエーション・アルゴリズムを活用して、人物間のオクルージョンと骨の長さの制約を推論することで、個人にジョイントを割り当てています。     
+Mehtaら[198]は、精度に関わらず、可視化されたボディジョイントの中間的な3Dポーズを素早く推定する。    
+そして、学習したポーズプライアとグローバルコンテキストを用いて、オクルージョンしたジョイントを推論することで、完成した3Dポーズを再構築する。    
+最終的な3Dポーズは、時間的なコヒーレンスを適用し、運動学的な骨格モデルをフィットさせることで洗練された。   
