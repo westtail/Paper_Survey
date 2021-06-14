@@ -913,3 +913,145 @@ While for the bottom-up approaches, additional model regressor module is needed 
 トップダウン型のアプローチでは、個々の人物を検出した後、モデルベースの3D一人用HPE推定器を組み込むことで、各人物の人体メッシュを容易に復元することができます。     
 一方、ボトムアップ型のアプローチでは、最終的な3Dポーズに基づいて人体メッシュを再構成するために、追加のモデル回帰モジュールが必要となります。     
 
+### 4.1.2 Multi-view 3D HPE マルチビュー3D HPE
+The partial occlusion is a challenging problem for 3D HPE in the single-view setting.     
+The natural solution to overcome this problem is to estimate 3D human pose from multiple views, since the occluded part in one view may become visible in other views.     
+In order to reconstruct the 3D pose from multiple views, the association of corresponding location between different cameras needs to be resolved.     
+A group of methods [199] [200] [201] [202] [203] used body models to tackle the association problem by optimizing model parameters to match the model projection with the 2D pose.       
+The widely used 3D pictorial structure model [204] is such a model.      
+However, these methods usually need large memory and expensive computational cost, especially for multi-person 3D HPE under multi-view settings.        
+Rhodin et al. [205] employed a multi-view consistency constraint in the network, however it requires a large amount of 3D groundtruth training data.       
+To overcome this limitation, Rhodin et al. [206] further proposed an encoder-decoder framework to learn the geometry-aware 3D latent representation from multi-view images and background segmentation without 3D annotations.      
+Chen et al. [207], Dong et al. [202], Chen et al. [208], Mitra et al. [209], Iqbal et al. [210], Zhang et al. [211], and Huang et al. [212] proposed multi-view matching frameworks to reconstruct 3D human pose across all viewpoints with consistency constraints.      
+Pavlakos et al. [199] and Zhang et al. [213] aggregated the 2D keypoint heatmaps of multi-view images into a 3D pictorial structure model based on all the calibrated camera parameters.      
+However, when multi-view camera environments change, the model needs to be retrained.         
+Liang et al. [201] and Habermann et al. [214] inferred the non-rigid 3D deformation parameters to reconstruct a 3D human body mesh from multi-view images.       
+Kadkhodamohammadi and Padoy [215], Qiu et al. [200], and Kocabas et al. [216] employed epipolar geometry to match paired multi-view poses for 3D pose reconstruction and generalized their methods to new multi-view camera environments.      
+It should be noted that matching each pair of views separately without the cycle consistency constraint may lead to incorrect 3D pose reconstructions [202].     
+Tu et al. [203] aggregated all the features in each camera view in the 3D voxel space to avoid incorrect estimation in each camera view.      
+A cuboid proposal network and a pose regression network were designed to localize all people and to estimate the 3D pose, respectively.      
+When given sufficient viewpoints (more than ten), it is not practical to use all viewpoints for 3D pose estimation.       
+Pirinen et al. [217] proposed a selfsupervised reinforcement learning approach to select a small set of viewpoints to reconstruct the 3D pose via triangulation.     
+Besides accuracy, the lightweight architecture, fast inference time, and efficient adaptation to new camera settings also need to be taken into consideration in multi-view HPE.      
+In contrast to [202] which matched all view inputs together, Chen et al. [218] applied an iterative processing strategy to match 2D poses of each view with the 3D pose while the 3D pose was updated iteratively.      
+Compared to the previous methods whose running time may explode with the increase in the number of cameras, their method has linear time complexity.       
+Remelli et al. [219] encoded images of each view into a unified latent representation so that the feature maps were disentangled from camera viewpoints.     
+As a lightweight canonical fusion, these 2D representations are lifted to the 3D pose using a GPU-based Direct Linear Transform to accelerate the processing.     
+In order to improve the generalization ability of multi-view fusion scheme, Xie et al. [220] proposed a pre-trained multi-view fusion model (MetaFuse), which can be efficiently adapted to new camera settings with few labeled data.      
+They deployed the modelagnostic meta-learning framework to learn the optimal initialization of the generic fusion model for adaptation.
+
+部分的なオクルージョンは、単視点での3D HPEにとって難しい問題です。    
+この問題を解決するための自然な方法は、複数のビューから人間の3Dポーズを推定することです。なぜなら、1つのビューで隠蔽された部分が他のビューでは見えることがあるからです。    
+複数のビューから3Dポーズを再構成するためには、異なるカメラ間の対応する位置の関連性を解決する必要がある。    
+ボディモデルを用いて、モデルのパラメータを最適化し、モデルの投影と2Dポーズを一致させることで、関連付けの問題に取り組む手法がある [199] [200] [201] [202] [203]。      
+広く使われている3次元絵画構造モデル[204]は、このようなモデルである。     
+しかし、これらの方法は、特にマルチビュー設定の下での複数人の3D HPEのために、通常、大容量のメモリと高価な計算コストを必要とする。       
+Rhodinら[205]は、ネットワークに多視点一貫性制約を採用しているが、大量の3Dグランドトゥルースの学習データが必要である。      
+この限界を克服するために、Rhodinら[206]は、マルチビュー画像と3Dアノテーションのない背景セグメンテーションからジオメトリを考慮した3D潜在表現を学習するエンコーダ・デコーダフレームワークをさらに提案した。     
+Chenら[207]、Dongら[202]、Chenら[208]、Mitraら[209]、Iqbalら[210]、Zhangら[211]、Huangら[212]は、一貫性制約のあるすべての視点で人間の3Dポーズを再構成するマルチビューマッチングフレームワークを提案した。     
+Pavlakosら[199]とZhangら[213]は、マルチビュー画像の2Dキーポイントヒートマップを、較正されたすべてのカメラパラメータに基づいて、3D絵画構造モデルに集約した。     
+しかし、マルチビューカメラの環境が変化すると、モデルを再学習する必要がある。        
+Liangら[201]とHabermannら[214]は，マルチビュー画像から3D人体メッシュを再構成するために，非剛体の3D変形パラメータを推論している．      
+Kadkhodamohammadi and Padoy [215]，Qiu et al. [200]，Kocabas et al. [216]は，エピポーラ幾何学を用いて，3D ポーズ再構成のためにマルチビューのペアポーズをマッチングし，その手法を新しいマルチビューカメラ環境に一般化した．   
+なお，周期整合性制約を用いずに各ビューのペアを個別にマッチングすると，誤った3次元ポーズ再構成につながる可能性があることに注意が必要である[202]．     
+Tuら[203]は、各カメラ・ビューでの誤った推定を避けるために、各カメラ・ビューのすべての特徴を3Dボクセル空間に集約した。     
+人をローカライズするために立方体提案ネットワークを、3Dポーズを推定するためにポーズ回帰ネットワークをそれぞれ設計した。     
+十分な視点（10以上）が与えられた場合、3Dポーズ推定のためにすべての視点を使用することは実用的ではない。      
+Pirinenら[217]は，自己教師付き強化学習法を提案し，小さな視点セットを選択して Pirinenら[217]は，三角測量によって3Dポーズを再構成するために，小さな視点のセットを選択する自己教師付き強化学習アプローチを提案した．     
+マルチビューHPEでは、精度に加えて、軽量なアーキテクチャ、高速な推論時間、新しいカメラ設定への効率的な適応なども考慮する必要がある。     
+Chenら[218]は、すべてのビューの入力をまとめて照合する[202]とは対照的に、反復処理戦略を適用して、3Dポーズを反復的に更新しながら、各ビューの2Dポーズを3Dポーズに照合しています。     
+カメラの数が増えると実行時間が爆発的に増加する可能性がある従来の手法と比較して、彼らの手法は線形の時間的複雑さを持っています。      
+Remelliら[219]は，各ビューの画像を統一的な潜在表現にエンコードし，特徴マップがカメラの視点から切り離されるようにしました．    
+軽量な正準融合として、GPUベースのDirect Linear Transformを用いて、これらの2D表現を3Dポーズにリフトアップし、処理を高速化しています。     
+Xieら[220]は、多視点融合方式の汎用性を向上させるために、事前に学習された多視点融合モデル（MetaFuse）を提案しました。このモデルは、少ないラベル付きデータで新しいカメラ設定に効率的に適応することができます。   
+彼らは、モデル不可知論的なメタ学習フレームワークを展開して、一般的な融合モデルの最適な初期化を学習しました。融合モデルの最適な初期化を学習するために、モデル不可知論的なメタ学習フレームワークを導入しました。
+
+### 4.2 3D HPE from other sources 他のソースからの3D HPE
+Although monocular RGB camera is the most common device used for 3D HPE, other sensors (e.g., depth sensor, IMUs, and radio frequency device) are also used for this purpose.    
+
+3D HPEには、単眼のRGBカメラが最も一般的なデバイスですが 3D HPEには単眼RGBカメラが最も一般的ですが、その他のセンサー（深度センサー、IMU, や高周波デバイスなど）も利用されています。   
+
+#### Depth and point cloud sensors:  深度センサーと点群センサー 
+Depth sensors have gained more attention recently for conducting 3D computer vision tasks due to their low-cost and increased utilization.      
+As one of the key challenges in 3D HPE, the depth ambiguity problem can be alleviated by utilizing depth sensors.     
+Yu et al. [221] presented a single-view and real-time method named DoubleFusion to estimate 3D human pose from a single
+depth sensor without using images.     
+The inner body layer was used to reconstruct 3D shape by volumetric representation, and the outer layer updated the body shape and pose by fusing more geometric details.      
+Xiong et al. [222] proposed an Anchor-to-Joint regression network (A2J) using depth images. 3D joints positions were estimated by integrating estimated multiple anchor points with global-local spatial context information.      
+Kadkhodamohammadi et al. [223] used multi-view RGB-D cameras to capture color images with depth information in the real operating room environments.       
+A random forest-based prior was deployed to incorporate priori environment information.      
+The final 3D pose was estimated by multi-view fusion and RGB-D optimization.      
+Zhi et al. [224] reconstructed detailed meshes with highresolution albedo texture from RGB-D video.       
+Compared with depth images, point clouds can provide more information.     
+The state-of-the-art point cloud feature extraction techniques, PointNet [225] and PointNet++ [226], have demonstrated excellent performance for classification and segmentation tasks.     
+Jiang et al. [227] combined PointNet++ with the SMPL body model to regress 3D human pose.      
+A modified PointNet++ with a graph aggregation module can extract more useful unordered features.     
+After mapping into ordered skeleton joint features by an attention module, a skeleton graph module extracts ordered features to regress SMPL parameters for accurate 3D pose estimation.      
+Wang et al. [228] presented PointNet++ with a spatial-temporal mesh attention convolution method to predict 3D human meshes with refinement.
+
+深度センサーは、低コストで利用しやすいことから、3Dコンピュータビジョンのタスクを遂行するために近年注目されています。     
+3D HPEにおける重要な課題の1つである奥行きの曖昧さの問題は、奥行きセンサを利用することで軽減することができます。    
+Yuら[221]は，画像を使わずに1つの深度センサから人間の3次元姿勢を推定する，DoubleFusionと名付けられたシングルビューのリアルタイム手法を発表しました．
+Yuら[221]は，画像を使用せずに1つの深度センサから人間の3Dポーズを推定する単視点・リアルタイム手法DoubleFusionを発表した．    
+内側のボディレイヤーはボリューム表現により3D形状を再構築し、外側のレイヤーはより多くの幾何学的な詳細を融合することでボディ形状とポーズを更新した。     
+Xiongら[222]は，深度画像を用いたAnchor-to-Joint regression network（A2J）を提案した．推定された複数のアンカーポイントを、グローバル・ローカルな空間コンテキスト情報と統合することで、3D関節位置を推定した。     
+Kadkhodamohammadiら[223]は，マルチビューRGB-Dカメラを用いて，実際の手術室環境における奥行き情報を含むカラー画像を撮影した．      
+また，ランダムフォレストに基づく事前処理により，環境情報を事前に取り込んだ．     
+最終的な3Dポーズは、多視点融合とRGB-D最適化によって推定された。     
+Zhiら[224]は，RGB-Dビデオから高解像度のアルベドテクスチャを持つ詳細なメッシュを再構成した．      
+深度画像と比較して，点群はより多くの情報を提供することができる．    
+最先端の点群特徴抽出技術であるPointNet [225]およびPointNet++ [226]は、分類やセグメンテーションのタスクにおいて優れた性能を発揮します。    
+Jiangら[227]は、PointNet++とSMPLのボディモデルを組み合わせて、人間の3Dポーズを回帰させています。     
+グラフ集約モジュールを用いて改良したPointNet++は、より有用な順序付けられていない特徴を抽出することができる。    
+注意モジュールによって順序付けられたスケルトン・ジョイント特徴にマッピングされた後、スケルトン・グラフ・モジュールが順序付けられた特徴を抽出し、正確な3Dポーズ推定のためにSMPLパラメータを回帰する。     
+Wangら[228]は、PointNet++と空間的・時間的メッシュ注目コンボリューション法を用いて、洗練された人間の3Dメッシュを予測する方法を紹介しています。
+
+#### IMUs with monocular images: 単眼鏡で撮影されたIMU 
+ 
+Wearable Inertial Measurement Units (IMUs) can track the orientation and acceleration of specific human body parts by recording motions without object occlusions and clothes obstructions.      
+However, the drifting problem may occur overtime when using IMUs.      
+Marcard et al. [229] proposed the Sparse Inertial Poser (SIP) to reconstruct human pose from 6 IMUs attached to the human body.      
+The collected information was fitted into the SMPL body model with coherence constraints to obtain accurate results.     
+Marcard et al. [230] further associated 6-17 IMU sensors with a hand-held moving camera for in-the-wild 3D HPE.    
+A graph-based optimization method was introduced to assign each 2D person detection to a 3D pose candidate from long-range frames.      
+Huang et al. [231] addressed the limitation of the Sparse Inertial Poser (SIP) method [229].     
+Multiple pose parameters can generate the same IMU orientation, also collecting IMUs data is time-consuming. 
+Thus, a large synthetic dataset was created by placing virtual sensors on the SMPL mesh to obtain orientations and accelerations from motion capture sequences of AMASS dataset [176]. 
+A bi-directional RNN framework was proposed to map IMU orientations and accelerations to SMPL parameters with past and future information.       
+Zhang et al. [232] introduced an orientation regularized pictorial structure model to estimate 3D pose from multi-view heatmaps associated with IMUs orientation.      
+Huang et al. [233] proposed DeepFuse, a twostage approach by fusing IMUs data with multi-view images. The first stage only processes multi-view images to predict a volumetric representation and the second stage uses IMUs to refine the 3D pose by an IMU-bone refinement layer.      
+Radio frequency device: Radio frequency (RF) based sensing technology has also been used to localize people.      
+The ability to traverse walls and to bounce off human bodies in the WiFi range without carrying wireless transmitters is the major advantage for deploying a RF-based sensing system.      
+Also, privacy can be preserved due to non-visual data.       
+However, RF signals have a relatively low spatial resolution compared to visual camera images and the RF systems have
+shown to generate coarse 3D pose estimation.     
+Zhao et al. [234] proposed a RF-based deep learning method, named RFPose, to estimate 2D pose for multi-person scenarios. Later the extended version, named RF-Pose3D [235], can estimate 3D skeletons for multi-person.      
+Based on these, Zhao et al. [236] presented a temporal adversarial training method with multi-headed attention module, named RF-Avatar, to recover a full 3D body mesh using the SMPL body model.       
+Other sensors/sources: Besides using the aforementioned sensors, Isogawa et al. [237] estimated 3D human pose from the 3D spatio-temporal histogram of photons captured by a non-line-of-sight (NLOS) imaging system.     
+Tome et al. [238] tackled the egocentric 3D pose estimation via a fish-eye camera.       
+Saini et al. [239] estimated human motion using images captured by multiple Autonomous Micro Aerial Vehicles (MAVs).      
+Clever et al. [240] focused on the HPE of the rest position in bed from pressure images which were collected by a pressure sensing mat.
+
+ウェアラブルな慣性計測ユニット（IMU）は、物体のオクルージョンや衣服の障害物がない状態で動作を記録することで、特定の人体部位の向きや加速度を追跡することができます。     
+しかし、IMUを使用する際には、時間経過とともにドリフト問題が発生する可能性があります。     
+Marcardら[229]は，人体に取り付けられた6つのIMUから人体の姿勢を再構成するSparse Inertial Poser（SIP）を提案した．     
+収集された情報は、正確な結果を得るために、コヒーレンス制約のあるSMPLボディモデルにフィッティングされた。    
+Marcardら[230]は、さらに6-17個のIMUセンサと手持ちの移動カメラを関連付けて、in-the-wild 3D HPEを実現した。   
+グラフベースの最適化手法が導入され、各2D人物検出を、長距離フレームからの3Dポーズ候補に割り当てることができました。     
+Huang et al. [231] は，Sparse Inertial Poser (SIP) 法 [229] の限界に取り組んでいる．    
+複数のポーズパラメータが同じIMUの姿勢を生成する可能性があり、また、IMUデータの収集には時間がかかります。
+そこで，AMASSデータセット[176]のモーションキャプチャーシーケンスから方位と加速度を得るために，SMPLメッシュ上に仮想センサを配置して，大規模な合成データセットを作成しました．
+また、IMUの姿勢と加速度を、過去と未来の情報を持つSMPLのパラメータにマッピングするために、双方向のRNNフレームワークが提案されました。      
+Zhangら[232]は 姿勢正則化絵画構造モデルを導入して 姿勢正則化絵画構造モデルを導入し，IMUの姿勢に関連したマルチビュー・ヒートマップから3Dポーズを推定した．の姿勢を推定した。     
+Huangら[233]は、IMUデータとマルチビュー画像を融合することで、2段階のアプローチであるDeepFuseを提案した。第1段階ではマルチビュー画像のみを処理してボリューム表現を予測し、第2段階ではIMUを用いてIMU-bone refinement layerにより3Dポーズを精密化する。     
+無線周波数デバイス。無線周波数（RF）を利用したセンシング技術も、人の位置を特定するために利用されている。     
+無線送信機を持ち歩かなくても、壁を通過したり、WiFi範囲内の人体に跳ね返ったりすることができるのは、RFベースのセンシングシステムを導入する上での大きなメリットです。     
+また、非視覚的なデータのため、プライバシーを守ることができます。      
+しかし、RF信号は、視覚的なカメラ画像に比べて空間分解能が低く、RFシステムは、粗い3Dポーズを生成することが示されています。
+粗い3Dポーズ推定を行うことが示されている。    
+Zhaoら[234]は、複数人のシナリオで2Dポーズを推定するために、RFPoseと名付けられたRFベースの深層学習法を提案した。その後、RF-Pose3D[235]と名付けられた拡張版は、多人数のための3Dスケルトンを推定することができる。     
+これらに基づいて、Zhaoら[236]は、SMPLボディモデルを用いてフル3Dボディメッシュを復元するために、RF-Avatarと名付けられた多頭注意モジュールを用いた時間的敵対的学習法を発表した。      
+その他のセンサー/ソース 前述のセンサ以外にも，Isogawaら[237]は，非線源（NLOS）イメージングシステムで撮影されたフォトンの3次元時空間ヒストグラムから人間の3次元ポーズを推定している．    
+Tomeら[238]は、魚眼カメラを用いた自我中心の3Dポーズ推定に取り組んだ。      
+Sainiら[239]は，複数の自律型小型航空機（MAV）で撮影した画像を用いて人間の動きを推定している．     
+Cleverら[240]は、圧力感知マットによって収集された圧力画像からベッドでの休息位置のHPEに着目した。
