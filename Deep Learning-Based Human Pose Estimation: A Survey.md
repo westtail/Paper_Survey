@@ -723,3 +723,85 @@ Pavlloら[140]は，連続する2Dシーケンスから2Dキーポイント上�
 Chenら[147]は、[140]に基づいて、ビデオフレーム間の人体解剖学的な時間的一貫性を確保するために、骨の方向モジュールと骨の長さモジュールを追加し、Liuら[148]は、有意なフレームを認識し、大きな時間的受容野における長距離依存性をモデル化するために、注意メカニズムを利用しています。     
 Zengら[133]は、希少で見たことのないポーズの問題を解決するために、分割・再結合戦略を採用した。     
 これは、人体を局所的な領域に分割して、時間的に別の畳み込みネットワークブランチで処理し、その後、各ブランチから得られた低次元のグローバルコンテキストを結合して、グローバルなコヒーレンスを維持するというものである。    
+### Model-based methods. モデルベースの方法。
+Model-based methods incorporate parametric body models as noted in Section 2 (such as kinematic model and volumetric model) to estimate human pose and shape as shown in Fig. 5(c).      
+The kinematic model is an articulated body representation by connected bones and joints with kinematic constraints, which has gained increasing attention in 3D HPE in recent years.      
+Many methods leverage prior knowledge based on the kinematic model such as skeletal joints connectivity information, joints rotation properties, and fixed bone-length ratios for plausible pose estimation, e.g., [149] [19] [150] [151] [152] [153] [154] [155].      
+Zhou et al. [149] embedded a kinematic model into a network as kinematic layers to enforce the orientation and rotation constrains.      
+Nie et al. [150] and Lee et al. [156] employed a skeleton-LSTM network to leverage joint relations and connectivity.     
+Observing that human body parts have a distinct degree of freedom (DOF) based on the kinematic structure, Wang et al. [151] and Nie et al. [154] proposed bidirectional networks to model the kinematic and geometric dependencies of the human skeleton.        
+Kundu et al. [152] [157] designed a kinematic structure preservation approach by inferring local-kinematic parameters with energy-based loss and explored 2D part segments based on the parent-relative local limb kinematic model.      
+Xu et al. [153] demonstrated that noisy 2D joint is one of the key obstacles for accurate 3D pose estimation.     
+Hence a 2D pose correction module was employed to refine unreliable 2D joints based on the kinematic structure.      
+Zanfir et al. [158] introduced a kinematic latent normalizing flow representation (a sequence of invertible transformations applied to the original distribution) with differentiable semantic body part alignment loss functions.   
+Compared with the kinematic model, which produces human poses or skeletons, volumetric models can recover high-quality human mesh, providing extra shape information of human body.       
+As one of the most popular volumetric models, the SMPL model [25] has been widely used in  3D HPE, e.g., [159] [160] [161] [162] [163] [164] [165] [166] [167] [168], because it is compatible with existing rendering engines.       
+Tan et al. [161], Tung et al. [162], Pavlakos et al. [169], and Omran et al. [170] regressed SMPL parameters to reconstruct 3D human mesh.      
+Instead of predicting SMPL parameters, Kolotouros et al. [171] regressed the locations of the SMPL mesh vertices using a Graph-CNN architecture.       
+Zhu et al. [172] combined the SMPL model with a hierarchical mesh deformation framework to enhance the flexibility of free-form 3D deformation.      
+Kundu et al. [173] included a colorrecovery module in the SMPL model to obtain vertex color via reflectional symmetry.     
+Arnab et al. [113] pointed out that methods using the SMPL model usually fail on the in-thewild data.       
+They employed the bundle adjustment method to cope with occlusion, unusual poses and object blur.     
+Doersch and Zisserman [165] proposed a transfer learning method to regress SMPL parameters by training on the synthetic human video dataset SURREAL [174].      
+Kocabas et al. [175] included the large-scale motion capture dataset AMASS [176] for adversarial training of their SMPL-based method named VIBE (Video Inference for Body Pose and Shape Estimation).      
+VIBE leveraged AMASS to discriminate between real human motions and predicted pose by pose regression module.      
+Since low-resolution visual content is more common in real-world scenarios than the high-resolution visual content, existing well-trained models may fail when resolution is degraded.      
+Xu et al. [177] introduced the contrastive learning scheme into self-supervised resolution-aware SMPL-based network.     
+The self-supervised contrastive learning scheme uses a selfsupervision loss and a contrastive feature loss to enforce the feature and scale consistency.      
+There are several extended SMPL-based models to address the limitations of the SMPL model such as high computational complexity, and lack of hands and facial landmarks.        
+Bogo et al. [159] proposed SMPLify to estimate 3D human mesh, which fits the SMPL model to the detected 2D joints and minimizes the re-projection error.       
+An extended version of SMPLify was presented by Lassner et al. [160].   
+The running time is reduced by employing a random forest regression to regress SMPL parameters, but it still cannot achieve real-time throughput.      
+Kanazawa et al. [178] further proposed an adversarial learning approach to directly infer SMPL parameters in real-time. Pavlakos et al. [179] introduced a new model, named SMPL-X, that can also predict fully articulated hands and facial landmarks.      
+Following the SMPLify method, they also proposed SMPLifyX, which is an improved version learned from AMASS dataset [176].       
+Hassan et al. [163] further extended SMPLify-X to PROX – a method enforcing Proximal Relationships with Object eXclusion by adding 3D environmental constraints.      
+Kolotouros et al. [164] integrated the regression-based and optimization-based SMPL parameter estimation methods to a new one named SPIN (SMPL oPtimization IN the loop) while employing SMPLify in the training loop.     
+Osman et al. [180] upgraded SMPL to STAR by training with additional 10,000 scans for better model generalization.     
+The number of model parameters is reduced to 20% of that of SMPL.     
+Instead of using the SMPL-based model, other volumetric models have also been used for recovering 3D human mesh, e.g., [181] [182] [183] [184].       
+Chen et al. [182] introduced a Cylinder Man Model to generate occlusion labels for 3D data and performed data augmentation.     
+A pose regularization term was introduced to penalize wrong estimated occlusion labels.        
+Xiang et al. [183] utilized the Adam model [30] to reconstruct the 3D motions. A 3D human representation, named 3D Part Orientation Fields (POFs), was introduced to encode the 3D orientation of human body parts in the 2D space.     
+Wang et al. [185] presented a new Bone-level Skinned Model of human mesh, which decouples bone modelling and identity-specific variations by setting bone lengths and joint angles.      
+Fisch and Clark [186] introduced an orientation keypoints model which can compute full 3-axis joint rotations including yaw, pitch, and roll for 6D HPE.
+
+モデルベースの手法では、図5（c）に示すように、第2章で述べたパラメトリックなボディモデル（キネマティックモデルやボリュームモデルなど）を用いて、人間の姿勢や形状を推定する。     
+キネマティックモデルとは、骨や関節を運動学的に拘束して連結した多関節体の表現であり、近年の3D HPEでは注目されている。     
+多くの手法は，骨格の関節接続情報，関節の回転特性，固定された骨の長さの比率など，運動モデルに基づく事前知識を活用して，妥当なポーズ推定を行っているが，例えば，[149] [19] [150] [151] [152] [153] [154] [155]などがある．     
+Zhouら[149]は、キネマティック・モデルをキネマティック・レイヤーとしてネットワークに組み込み、姿勢と回転の制約を強化している。     
+Nieら[150]とLeeら[156]は，関節の関係と接続性を利用するために，スケルトン-LSTMネットワークを採用した．    
+人体の各部位が運動構造に基づいて明確な自由度（DOF）を持っていることに着目し、Wangら[151]およびNieら[154]は、人体骨格の運動依存性および幾何学的依存性をモデル化する双方向ネットワークを提案した。       
+Kundu ら [152] [157] は、エネルギーベースのロスを用いて局所運動パラメータを推論することで、運動構造保存アプローチを設計し、親-相対的な局所四肢の運動モデルに基づいて 2D パーツセグメントを探索した。     
+Xuら[153]は、ノイズの多い2D関節が正確な3Dポーズ推定のための重要な障害の1つであることを示した。    
+そこで、2Dポーズ補正モジュールを用いて、信頼性のない2Dジョイントを運動学的構造に基づいて改良した。     
+Zanfirら[158]は、微分可能なセマンティック身体部位アライメント損失関数を用いて、運動学的な潜在的正規化フロー表現（元の分布に適用される反転可能な変換のシーケンス）を導入した。   
+人間のポーズや骨格を生成するキネマティックモデルと比較して，ボリューメトリックモデルは高品質の人間のメッシュを復元することができ，人体の余分な形状情報を提供することができる．      
+最も人気のあるボリュームモデルの1つであるSMPLモデル[25]は，既存のレンダリングエンジンとの互換性があるため，例えば[159] [160] [161] [162] [163] [164] [165] [166] [167] [168]のように，3D HPEで広く使用されています．      
+Tanら[161]，Tungら[162]，Pavlakosら[169]，Omranら[170]は，SMPLパラメータを回帰させて，人間の3次元メッシュを再構成しています．     
+SMPLのパラメータを予測する代わりに Kolotourosら[171]は，SMPLパラメータを予測する代わりに，SMPLメッシュの頂点の位置を回帰しました．Graph-CNNアーキテクチャを用いて，SMPLメッシュの頂点の位置を回帰しました．     
+Zhuら[172]は，SMPLモデルと階層的なメッシュ変形フレームワークを組み合わせることで，自由形状による3次元変形の柔軟性を高めている．     
+Kunduら[173]は，SMPLモデルに色回復モジュールを組み込み，反射対称性によって頂点の色を得るようにした．    
+Arnabら[113]は，SMPLモデルを用いた手法は，イン・ザ・ワイルド・データでは失敗することが多いと指摘している．      
+Arnabら[113]は，SMPLモデルを用いた手法は，in-the-wildデータでは失敗することが多いと指摘し，オクルージョン，異常なポーズ，物体のブレに対処するためにバンドル調整法を採用した．    
+Doersch and Zisserman [165]は，人間の合成映像データセット SURREAL [174]で学習することで，SMPLパラメータを回帰させる伝達学習法を提案した．     
+Kocabasら[175]は，VIBE（Video Inference for Body Pose and Shape Estimation）と名付けたSMPLベースの手法の敵対的学習のために，大規模モーションキャプチャデータセットAMASS[176]を用いた．     
+VIBEは、AMASSを利用して、実際の人間の動きと、ポーズ回帰モジュールによって予測されたポーズとを識別する。     
+実世界のシナリオでは、高解像度のビジュアル・コンテンツよりも低解像度のビジュアル・コンテンツの方が一般的であるため、解像度が低下すると既存の十分に学習されたモデルが失敗する可能性がある。     
+Xuら[177]は，自己教師付き解像度認識SMPLベースのネットワークにコントラスト学習スキームを導入した．    
+自己教師付きコントラスト学習スキームは、自己教師損失とコントラスト特徴損失を使用して、特徴とスケールの一貫性を確保します。     
+計算量が多い、手や顔のランドマークがないなどのSMPLモデルの限界を解決するために、いくつかの拡張SMPLベースモデルがあります。       
+Bogoら[159]は，人間の3次元メッシュを推定するためにSMPLifyを提案しており，検出された2次元関節にSMPLモデルを適合させ，再投影誤差を最小化している．      
+Lassnerら[160]は，SMPLifyの拡張版を発表した．     
+SMPLパラメータの回帰にランダムフォレスト回帰を採用することで実行時間を短縮していますが，それでもリアルタイムのスループットを実現することはできません．     
+Kanazawaら[178]はさらに，SMPLパラメータをリアルタイムで直接推論するための敵対的学習アプローチを提案した。Pavlakosら[179]は，SMPL-Xと名付けた新しいモデルを導入し，完全に関節のある手や顔のランドマークも予測できるようにした．     
+彼らは，SMPLify 法に続き，AMASS データセット[176]から学習した改良版である SMPLifyX も提案している．      
+Hassanら[163]は、SMPLify-Xをさらに拡張し、3D環境制約を加えることでProximal Relationships with Object eXclusionを強化する手法であるPROXを提案している。     
+Kolotourosら[164]は，回帰ベースと最適化ベースのSMPLパラメータ推定法をSPIN（SMPL oPtimization IN the loop）という新しい手法に統合し，SMPLifyを学習ループに採用した．    
+Osman et al. [180]は，SMPLをSTARにアップグレードしました．10,000スキャンを追加して学習することで、モデルの汎用性を高めました。    
+モデルパラメータの数は モデルのパラメータ数は、SMPLの20%に減少しました。    
+SMPLに基づいたモデルを使用する代わりに，他のボリューメトリック SMPLに基づくモデルの代わりに，他の体積モデルも3D人体メッシュの復元に使用されています．例えば，[181] [182] [183] [184]などである．      
+Chenら[182]は，オクルージョンを生成するために Cylinder Man Modelを導入し，3Dデータのオクルージョンラベルを生成して を導入し，データの補強を行った．    
+ポーズ正則化 誤って推定されたオクルージョンラベルにペナルティを課すために、ポーズ正則化項が導入された。ラベルを生成する。       
+Xiangら[183]は、Adamモデル[30]を利用して、3Dモーションを再構成した。また、3D Part Orientation Fields（POF）と呼ばれる3D人体表現を導入し、2D空間における人体パーツの3Dオリエンテーションを符号化した。   
+Wangら[185]は、骨の長さと関節の角度を設定することで、骨のモデリングとアイデンティティ特有のバリエーションを切り離す、新しいBone-level Skinned Model of human meshを発表した。     
+Fisch and Clark [186]は、6D HPE のためにヨー、ピッチ、ロールを含む完全な 3 軸関節回転を計算できるオリエンテーション・キーポイント・モデルを導入した。
