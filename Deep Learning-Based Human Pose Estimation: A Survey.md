@@ -1091,7 +1091,7 @@ SURREALデータセット[174]やGTA-IMデータセット[243]などのように
 例えば、2Dから3Dへのリフティング手法は、3Dポーズを推論するための中間表現として2Dポーズに依存している。      
 そのため、高精度のポーズ推定を維持しつつ、計算効率の良い2D HPEパイプラインを開発することが重要です。
 
-5 DATASETS AND EVALUATION METRICS データセットと評価指標
+## 5 DATASETS AND EVALUATION METRICS データセットと評価指標
 Datasets are very much needed in conducting HPE.      
 They are also necessary to provide a fair comparison among different algorithms.       
 Collecting a comprehensive and universal dataset poses challenges due to the complexity and variations of application scenes.       
@@ -1145,3 +1145,83 @@ FLICデータセットでは，Poselets[260]と呼ばれる身体部位検出器
 このデータセットは，オリジナルのFLICデータセットのスーパーセットであり，20,928個の非正面のオクルージョンサンプルを含んでいます．      
 FLIC-plusと呼ばれる新しいFLICベースのデータセットは，FLICデータセットのテストセットと同じシーンを含むすべての画像を削除することによって，[53]で紹介されました．     
 データセットのリンク： https://bensapp.github.io/flic-dataset.html
+
+#### Leeds Sports Pose (LSP) Dataset  リーズ・スポーツ・ポーズ（LSP）データセット
+Leeds Sports Pose (LSP) Dataset [16] has 2,000 annotated images from Flickr and 8 sports tags covering different sports including athletics, badminton, baseball, gymnastics, parkour, soccer, tennis, and volleyball.    
+In the LSP dataset, every person’s full body is labeled with a total of 14 joints.      
+In addition, the Leeds Sports Pose Extended dataset (LSPextended) [254] extends the LSP dataset and is only used for training.      
+LSP-extended dataset has over 10,000 images from Flickr.      
+In most recent research, LSP and LSP-extended datasets have been used for single-person HPE.       
+Dataset Link: https://sam.johnson.io/research/lsp.html
+
+Leeds Sports Pose (LSP) Dataset [16] は，Flickr からの 2,000 枚の注釈付き画像と，陸上競技，バトミントン，野球，体操，パルクール，サッカー，テニス，バレーボールなどのさまざまなスポーツをカバーする 8 つのスポーツタグを備えている．   
+LSPデータセットでは、すべての人の全身に合計14の関節がラベル付けされている。     
+さらに，Leeds Sports Pose Extended dataset (LSPextended) [254]は，LSPデータセットを拡張したもので，学習にのみ使用される．     
+LSP-extendedデータセットは、Flickrから10,000枚以上の画像 の画像が含まれています。     
+最近の研究では、LSPおよびLSP-extended データセットは，一人用のHPEに使用されている．      
+データセットのリンク https://sam.johnson.io/research/lsp.html
+
+#### Max Planck Institute for Informatics (MPII) Human Pose Dataset 
+Max Planck Institute for Informatics (MPII) Human Pose Dataset [253] is a popular dataset for evaluation of articulated HPE.      
+The dataset includes around 25,000 images containing over 40,000 individuals with 
+annotated body joints.       
+Based on [261], the images were systematically collected by a two-level hierarchical method to capture everyday human activities.       
+The entire dataset covers 410 human activities and all the images are labeled.       
+Each image was extracted from a YouTube video and provided with preceding and following un-annotated frames.       
+Moreover, rich annotations including body part occlusions, 3D torso and head orientations are labeled by workers on Amazon Mechanical Turk.       
+Images in MPII are suitable for 2D single-person or multi-person HPE. 
+Dataset Link: http://human-pose.mpi-inf.mpg.de/#
+
+Max Planck Institute for Informatics (MPII) Human Pose Dataset [253]は，関節型HPEの評価によく用いられるデータセットである．     
+このデータセットには、40,000人以上の人物を含む約25,000枚の画像が含まれています。
+このデータセットには，約25,000枚の画像が含まれている．      
+261]に基づいて，画像は2レベルの階層的な方法で体系的に収集され，人間の日常的な活動を捉えている．      
+データセット全体で410の人間の活動をカバーしており，すべての画像にはラベルが付けられている．      
+各画像は，YouTubeの動画から抽出され，前後にアノテーションのないフレームが用意されている．      
+さらに、Amazon Mechanical Turkの作業員によって、体の部位のオクルージョン、3Dの胴体や頭の向きなどの豊富なアノテーションが付けられている。      
+MPIIの画像は、2Dの1人用または複数人用のHPEに適しています。
+データセットリンク: http://human-pose.mpi-inf.mpg.de/#
+
+#### Microsoft Common Objects in Context (COCO)
+Microsoft Common Objects in Context (COCO) Dataset [108] is the most widely used large-scale dataset.      
+It has more than 330,000 images and 200,000 labeled subjects with keypoints, and each individual person is labeled with 17 joints.      
+The COCO dataset is not only proposed for pose estimation and analysis, but also used for object detection and image segmentation in natural environments, recognition in context, etc.      
+There are two versions of the COCO datasets for HPE: COCO keypoints 2016 and COCO
+keypoints 2017, which are hosted by COCO 2016 Keypoints Detection Challenge and COCO 2017 Keypoints Detection Challenge, respectively.     
+The difference between COCO 2016 and COCO 2017 lies in the training, validation and test split.        
+The COCO dataset has been extensively used in multiperson HPE works. 
+In addition, Jin et al. [262] proposed COCO-WholeBody Dataset with whole-body annotations for HPE.       
+Dataset Link: https://cocodataset.org/#home
+
+Microsoft Common Objects in Context (COCO) Dataset [108]は，最も広く使われている大規模データセットである．     
+このデータセットは，33万枚以上の画像と，キーポイントでラベル付けされた20万人の被写体を持ち，個々の人物には17個の関節がラベル付けされている．     
+COCOデータセットは、ポーズ推定や解析のために提案されているだけでなく、自然環境下での物体検出や画像セグメンテーション、文脈の中での認識などにも利用されている。     
+HPEのCOCOデータセットには、「COCO keypoints 2016」と「COCO
+keypoints 2017の2種類があり、それぞれCOCO 2016 Keypoints Detection ChallengeとCOCO 2017 Keypoints Detection Challengeが主催しています。    
+COCO 2016」と「COCO 2017」の違いは、トレーニング、検証、テストの分割にあります。       
+COCOデータセットは、多人数のHPE作品で広く使用されています。
+また、Jinら[262]は、HPEのために全身のアノテーションを施したCOCO-WholeBody Datasetを提案しました。      
+データセットのリンク： https://cocodataset.org/#home
+
+#### AI Challenger Human Keypoint Detection (AIC-HKD) Dataset
+AI Challenger Human Keypoint Detection (AIC-HKD) Dataset [255] is currently the largest training dataset for 2D HPE.      
+It has 300,000 annotated images for keypoint detection.      
+There are 210,000 images for training, 30,000 images for validation and over 600,000 images for testing.     
+The images were collected from internet search engines and mainly focused on daily activities of people. Dataset Link: https://challenger.ai/
+
+AI Challenger Human Keypoint Detection (AIC-HKD) Dataset [255]は、現在、2D HPEの最大のトレーニングデータセットである。     
+キーポイント検出のための30万枚のアノテーション画像があります。     
+トレーニング用に210,000枚、検証用に30,000枚、テスト用に600,000枚以上の画像が用意されています。    
+画像はインターネットの検索エンジンから収集したもので、主に人々の日常的な活動に焦点を当てています。データセットのリンク： https://challenger.ai/
+
+#### CrowdPose Dataset
+CrowdPose Dataset [256] is one of the latest dataset for 2D HPE in crowded and occlusive scenarios.     
+This dataset contains 20,000 images selected from 30,000 images with Crowd Index (a measurement satisfies uniform distribution to judge the crowding level in images ).        
+The training, validation and testing datasets have 10,000 images, 2,000 images and 8,000 images separately.      
+Dataset Link: https://github.com/Jeff-sjtu/CrowdPose
+
+CrowdPose データセット
+CrowdPose Dataset [256]は、混雑した閉塞感のあるシナリオでの2D HPEのための最新データセットの一つです。    
+このデータセットは，3万枚の画像から2万枚の画像を選び，Crowd Index（画像の混雑度を判断するための一様分布を満たす測定値）を用いています．       
+また、トレーニングデータ、検証データ、テストデータには、それぞれ1万枚、2千枚、8千枚の画像が含まれています。     
+データセットのリンク： https://github.com/Jeff-sjtu/CrowdPose
