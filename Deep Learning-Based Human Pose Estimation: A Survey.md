@@ -1055,3 +1055,38 @@ Zhaoら[234]は、複数人のシナリオで2Dポーズを推定するために
 Tomeら[238]は、魚眼カメラを用いた自我中心の3Dポーズ推定に取り組んだ。      
 Sainiら[239]は，複数の自律型小型航空機（MAV）で撮影した画像を用いて人間の動きを推定している．     
 Cleverら[240]は、圧力感知マットによって収集された圧力画像からベッドでの休息位置のHPEに着目した。
+
+#### 4.3 3D HPE Summary 3D HPEのまとめ
+3D HPE has made significant advancements in recent years.      
+Since a large number of 3D HPE methods apply the 2D to 3D lifting strategy, the performance of 3D HPE has been improved considerably due to the progress made in 2D HPE.     
+Some 2D HPE methods such as OpenPose [17], CPN [90], AlphaPose [89], and HRNet [81] have been extensively used as 2D pose detector in 3D HPE methods.     
+Besides the 3D pose, some methods also recover 3D human mesh from images or videos, e.g., [164] [175] [241] [242].     
+However, despite the progress made so far, there are still several challenges.      
+One challenge is the model generalization.      
+High-quality 3D ground truth pose annotations depend on motion capture systems which cannot be easily deployed in random environment.      
+Therefore, the existing datasets are mainly captured in constrained scenes.       
+The state-of-the-art methods can achieve promising results on these datasets, but their performance degrades when applied to in-the-wild data.      
+It is possible to leverage gaming engines to generate synthetic datasets with diverse poses and complex scenes, e.g., SURREAL dataset [174] and GTA-IM dataset [243].      
+However, learning from synthetic data may not achieve the desired performance due to a gap between synthetic and real data distributions.       
+Same as 2D HPE, robustness to occlusion and computation efficiency are two key challenges for 3D HPE as well.      
+The performance of current 3D HPE methods drops considerably in crowded scenarios due to severe mutual occlusion and possibly low resolution content of each person.      
+3D HPE is more computation demanding than 2D HPE.          
+For example, 2D to 3D lifting approaches rely on 2D poses as intermediate representations for inferring 3D poses.       
+Therefore, it is critical to develop computationally efficient 2D HPE pipelines while maintaining high accuracy for pose estimation. 
+
+3D HPEは、近年大きく進歩している。     
+多くの3D HPE手法は、2Dから3Dへのリフティング戦略を適用しているため、2D HPEの進歩により、3D HPEの性能が大幅に向上しています。    
+OpenPose[17]、CPN[90]、AlphaPose[89]、HRNet[81]などのいくつかの2D HPE手法は、3D HPE手法の2Dポーズ検出器として広く使用されている。    
+3D ポーズの他にも，画像やビデオから人間の 3D メッシュを復元する手法もある [164] [175] [241] [242]．    
+しかし、これまでの進歩にもかかわらず、いくつかの課題が残っている。     
+一つの課題は，モデルの一般化である．     
+高品質の3Dグランドトゥルースポーズアノテーションは、ランダムな環境に容易に展開できないモーションキャプチャシステムに依存する。     
+そのため、既存のデータセットは、主に制約のあるシーンで撮影されたものです。      
+最先端の手法は、これらのデータセットでは有望な結果を得ることができますが、実世界のデータに適用すると、その性能は低下します。     
+SURREALデータセット[174]やGTA-IMデータセット[243]などのように、ゲームエンジンを利用して、多様なポーズや複雑なシーンを持つ合成データセットを生成することが可能です。     
+しかし、合成データからの学習では、合成データと実データの分布にギャップがあるため、期待した性能が得られない可能性がある。      
+2D HPEと同様に、3D HPEにおいても、オクルージョンに対するロバスト性と計算効率が2つの重要な課題である。     
+現在の3D HPE手法は、人混みの中では相互のオクルージョンがひどく、また各人のコンテンツが低解像度である可能性があるため、性能が大幅に低下します。     
+3D HPEは、2D HPEよりも計算負荷が高い。         
+例えば、2Dから3Dへのリフティング手法は、3Dポーズを推論するための中間表現として2Dポーズに依存している。      
+そのため、高精度のポーズ推定を維持しつつ、計算効率の良い2D HPEパイプラインを開発することが重要です。
