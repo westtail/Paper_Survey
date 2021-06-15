@@ -1090,3 +1090,58 @@ SURREALデータセット[174]やGTA-IMデータセット[243]などのように
 3D HPEは、2D HPEよりも計算負荷が高い。         
 例えば、2Dから3Dへのリフティング手法は、3Dポーズを推論するための中間表現として2Dポーズに依存している。      
 そのため、高精度のポーズ推定を維持しつつ、計算効率の良い2D HPEパイプラインを開発することが重要です。
+
+5 DATASETS AND EVALUATION METRICS データセットと評価指標
+Datasets are very much needed in conducting HPE.      
+They are also necessary to provide a fair comparison among different algorithms.       
+Collecting a comprehensive and universal dataset poses challenges due to the complexity and variations of application scenes.       
+A number of datasets have been collected to evaluate and compare results based on different metrics.     
+In this section, we present the traditional datasets utilized in HPE, as well as more recent ones used for 2D and 3D deep learning-based HPE methods. 
+In addition to these datasets with different features and task requirements, this section also covers several commonly used evaluation metrics for both 2D and 3D HPE. 
+The results achieved by existing methods on the popular datasets are summarized as well.
+
+データセットはHPEを行う上で非常に必要なものです。     
+また、異なるアルゴリズム間で公正な比較を行うためにも必要です。      
+しかし、アプリケーションシーンの複雑さと多様性のために、包括的で普遍的なデータセットを収集することは困難です。      
+さまざまな評価基準に基づいて結果を評価・比較するために、多くのデータセットが収集されています。     
+このセクションでは、HPEで利用される伝統的なデータセットと、2Dおよび3Dの深層学習ベースのHPE手法に利用されるより新しいデータセットを紹介します。    
+特徴やタスク要件が異なるこれらのデータセットに加えて、このセクションでは、2Dおよび3D HPEの両方で一般的に使用されているいくつかの評価指標も取り上げています。   
+また、一般的なデータセットで既存の手法が達成した結果についてもまとめています。
+
+### 5.1 Datasets for 2D HPE 2D HPE用データセット
+There are many 2D human pose datasets before deep learning found its way into human pose estimation.     
+These datasets are of two types:      
+(1) upper body pose datasets including Buffy Stickmen [244], ETHZ PASCAL Stickmen [245], We Are Family [246], Video Pose 2 [247].    
+Activities [248]; and (2) full body pose datasets including PASCAL Person Layout [249], Sport [250] and UIUC people [251].        
+However, only a few recent works use these 2D HPE datasets because they have many limitations such as lack of diverse object movements and small number of images.      
+Since deep learning based approaches are fueled by large amounts of training data, only the large-scale 2D HPE datasets are reviewed in this section.      
+They are summarized under two different categories (image-based and video-based) in Table 2.    
+
+深層学習が人間の姿勢推定に使われるようになる前に、多くの2D人間の姿勢データセットがありました。    
+これらのデータセットには2つのタイプがある。     
+(1) Buffy Stickmen [244]、ETHZ PASCAL Stickmen [245]、We Are Family [246]、Video Pose 2 [247]、Activity [248]などの上半身のポーズデータセット。   
+Activities [248]、（2）PASCAL Person Layout [249]、Sport [250]、UIUC people [251]などの全身のポーズのデータセット。       
+しかし、これらの2D HPEデータセットは、多様な物体の動きがない、画像数が少ないなどの多くの制限があるため、最近ではわずかな作品しか使用されていない。     
+深層学習に基づくアプローチは、大量の学習データによって促進されるため、このセクションでは、大規模な2D HPEデータセットのみをレビューする。     
+これらのデータセットは、表2のように2つの異なるカテゴリ（画像ベースとビデオベース）にまとめられている。   
+
+### 5.1.1 Image-based datasets 画像ベースのデータセット
+
+#### Frames Labeled In Cinema (FLIC) Dataset
+Frames Labeled In Cinema (FLIC) Dataset [252] is one of the early image-based 2D HPE datasets, which contains 5,003 images collected automatically from Hollywood movies.            
+Around 4,000 images are used as the training set and the rest are used as the testing set.      
+The FLIC dataset uses a body part detector named Poselets [260] to obtain about 20K person candidates from every tenth frame of 30 popular Hollywood movies.      
+The subjects in these images have different kinds of poses.         
+The full set of frames harvested from the movies is called the FLIC-full dataset.      
+It is a superset of the original FLIC dataset and contains 20,928 occluded, non-frontal samples.       
+A new FLIC-based dataset named FLIC-plus was introduced in [53] by removing all the images that contain the same scene with the test set in the FLIC dataset.     
+Dataset Link: https://bensapp.github.io/flic-dataset.html
+
+Frames Labeled In Cinema (FLIC) Dataset [252]は、初期の画像ベースの2D HPEデータセットの1つで、ハリウッド映画から自動的に収集された5,003枚の画像を含んでいます。           
+約4,000枚の画像がトレーニングセットとして使用され、残りはテストセットとして使用されます。     
+FLICデータセットでは，Poselets[260]と呼ばれる身体部位検出器を用いて，30本の人気ハリウッド映画の10フレームごとに，約2万人の人物候補を抽出しています．     
+これらの画像に写っている被写体は，様々なポーズをとっています．        
+映画から抽出されたフレームのフルセットは，FLIC-fullデータセットと呼ばれています．     
+このデータセットは，オリジナルのFLICデータセットのスーパーセットであり，20,928個の非正面のオクルージョンサンプルを含んでいます．      
+FLIC-plusと呼ばれる新しいFLICベースのデータセットは，FLICデータセットのテストセットと同じシーンを含むすべての画像を削除することによって，[53]で紹介されました．     
+データセットのリンク： https://bensapp.github.io/flic-dataset.html
