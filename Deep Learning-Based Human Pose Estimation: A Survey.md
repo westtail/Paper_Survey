@@ -1225,3 +1225,93 @@ CrowdPose Dataset [256]は、混雑した閉塞感のあるシナリオでの2D 
 このデータセットは，3万枚の画像から2万枚の画像を選び，Crowd Index（画像の混雑度を判断するための一様分布を満たす測定値）を用いています．       
 また、トレーニングデータ、検証データ、テストデータには、それぞれ1万枚、2千枚、8千枚の画像が含まれています。     
 データセットのリンク： https://github.com/Jeff-sjtu/CrowdPose
+
+### 5.1.2 Video-based datasets ビデオベースのデータセット
+#### Penn Action Dataset
+Penn Action Dataset [257] consists of 2,326 video sequences with 15 different actions and human joint annotations.        
+The videos contain frames with annotations from sports actions: baseball pitch, baseball swing, tennis forehand, tennis serve, bench press, bowling, clean and jerk, golf swing, jump rope, jumping jacks, pull up, push up, sit up, squat, and strum guitar.     
+The annotations for images were labeled using Amazon Mechanical Turk.     
+Dataset Link: http://dreamdragon.github.io/PennAction/
+
+Penn Action Dataset [257] は，15 種類の動作と人間の関節のアノテーションを含む 2,326 のビデオシーケンスから構成される．       
+動画には，野球の投球，野球のスイング，テニスのフォアハンド，テニスのサーブ，ベンチプレス，ボウリング，クリーン＆ジャーク，ゴルフのスイング，縄跳び，跳び箱，懸垂，腕立て伏せ，座位，スクワット，ギターのかき鳴らしなどのスポーツアクションのアノテーションが付いたフレームが含まれている．    
+画像のアノテーションは，Amazon Mechanical Turkを使ってラベル付けしました．    
+データセットのリンク： http://dreamdragon.github.io/PennAction/
+
+#### Joint-annotated Human Motion Database
+Joint-annotated Human Motion Database (J-HMDB) [258] is a fully annotated video dataset for action recognition, human detection and HPE.      
+There are 21 action categories including brush hair, catch, clap, climb stairs, golf, jump, kick ball, pick, pour, pull-up, push, run, shoot ball, shoot bow, shoot gun, sit, stand, swing baseball, throw, walk, and wave.      
+There are 928 video clips comprising 31,838 annotated frames.     
+A 2D articulated human puppet model is applied to generate all the annotations based on Amazon Mechanical Turk.        
+The 70 percent images in the J-HMDB dataset are used for training and the rest images are used for testing.       
+Dataset Link: http://jhmdb.is.tue.mpg.de/
+
+Joint-annotated Human Motion Database（J-HMDB） [258]は，行動認識，人間検出，HPE のための完全なアノテーション付きのビデオデータセットである．     
+アクションには、髪をとかす、キャッチする、拍手する、階段を上る、ゴルフをする、ジャンプする、ボールを蹴る、拾う、注ぐ、引き上げる、押す、走る、ボールを撃つ、弓を撃つ、銃を撃つ、座る、立つ、野球のスイングをする、投げる、歩く、手を振るなど、21のカテゴリがあります。     
+928個のビデオクリップ、31,838個のフレームにアノテーションが施されています。    
+すべてのアノテーションの生成には，Amazon Mechanical Turkを利用した2次元関節人形モデルを適用した．       
+J-HMDBデータセットの70%の画像を学習に、残りの画像をテストに使用しています。      
+データセットのリンク： http://jhmdb.is.tue.mpg.de/
+
+### PoseTrack Dataset
+PoseTrack Dataset [259] is a large-scale dataset for multi- person pose estimation and articulated tracking in video analysis.       
+Each person in a video has a unique track ID with annotations.      
+PoseTrack contains 1,356 video sequences, around 46,000 annotated video frames and 276,000 body pose annotations for training, validation and testing.       
+Dataset Link: https://posetrack.net/
+
+PoseTrack Dataset [259]は，ビデオ解析における多人数のポーズ推定と関節追跡のための大規模なデータセットです．      
+ビデオ内の各人物は，注釈付きのユニークなトラックIDを持っています．     
+PoseTrackには、1,356のビデオシーケンス、約46,000のアノテーションされたビデオフレーム、276,000のボディポーズアノテーションがトレーニング、検証、テスト用に含まれています。      
+データセットのリンク: https://posetrack.net/
+
+### 5.2 Evaluation Metrics for 2D HPE 2D HPEの評価指標
+It is difficult to precisely evaluate the performance of HPE because there are many features and requirements that need to be considered (e.g., upper/full human body, single/multiple pose estimation, the size of human body).       
+As a result, many evaluation metrics have been used for 2D HPE.     
+Here we summarize the commonly used ones.       
+
+HPEの性能を正確に評価するのは難しい。なぜなら、考慮しなければならない特徴や要件が多いからである（例えば、上半身／全身、単一／複数のポーズ推定、人体の大きさ）。      
+そのため、2D HPEには多くの評価指標が用いられている。    
+ここでは、よく使われているものをまとめます。 
+
+#### Percentage of Correct Parts(PCP) パーセンテージオブコレクトパーツ(PCP)
+Percentage of Correct Parts (PCP) [263] is a measure commonly used in early works on 2D HPE, which evaluates stick predictions to report the localization accuracy for limbs.     
+The localization of limbs is determined when the distance between the predicted joint and ground truth joint is less than a fraction of the limb length (between 0.1 to 0.5).      
+In some works, the PCP measure is also referred to as PCP@0.5, where the threshold is 0.5. This measure is used on the LSP dataset for single-person HPE evaluation.      
+However, PCP has not been widely implemented in latest works because it penalizes the limbs with short length which are hard to detect.      
+The performance of a model is considered better when it has a higher PCP measure.     
+In order to address the drawbacks of PCP, Percentage of Detected Joints (PDJ) is introduced, where a prediction joint is considered as detected if the distance between predicted joints and true joints is within a certain fraction of the torso diameter [36].     
+
+Percentage of Correct Parts (PCP) [263] は、2D HPE の初期の作品でよく使われている指標で、スティック予測を評価して、手足のローカライズ精度を報告するものである。    
+手足のローカライズは、予測されたジョイントとグランドトゥルースジョイントの間の距離が、手足の長さの何分の一か（0.1から0.5の間）よりも小さい場合に判断される。     
+いくつかの作品では、PCPメジャーはPCP@0.5 とも呼ばれており、閾値は0.5であるとされている。この尺度は、一人用のHPE評価用のLSPデータセットで使用されています。     
+しかし、PCPは検出が困難な長さの短い手足にペナルティを与えるため、最近の作品ではあまり実装されていません。     
+また，PCPの値が大きいほど，モデルの性能が高いと考えられます．    
+PCPの欠点を解決するために、Percentage of Detected Joints (PDJ)が導入され、予測関節と真の関節の間の距離が胴体の直径のある割合以内であれば、予測関節が検出されたとみなされる[36]。  
+
+#### Percentage of Correct Keypoints (PCK)
+Percentage of Correct Keypoints (PCK) [264] is also used to measure the accuracy of localization of different keypoints within a given threshold.      
+The threshold is set to 50 percent of the head segment length of each test image and it is denoted as PCKh@0.5.      
+PCK is referred to as PCK@0.2 when the distance between detected joints and true joints is less than 0.2 times the torso diameter.      
+The higher the PCK value, the better model performance is regarded.      
+
+また，Percentage of Correct Keypoints (PCK) [264]は，与えられた閾値内での異なるキーポイントのローカライズの精度を測定するために使用される．     
+閾値は各テスト画像の頭部セグメント長の50％に設定され、PCKh@0.5 と表記されます。     
+PCKは、検出された関節と真の関節の間の距離が、胴体の直径の0.2倍以下の場合に、PCK@0.2 と表記されます。     
+PCKの値が大きいほど、モデルの性能が高いとみなされます。     
+
+#### Average Precision (AP) and Average Recall (AR). 
+AP measure is an index to measure the accuracy of keypoints detection according to precision (the ratio of true positive results to the total positive results) and recall (the ratio of true positive results to the total number of ground truth positives).       
+AP computes the average precision value for recall over 0 to 1. AP has several similar variants.      
+For example, Average Precision of Keypoints (APK) is introduced in [264].       
+Mean Average Precision (mAP), which is the mean of average precision over all classes, is a widely used metric on the MPII and PoseTrack datasets. Average Recall (AR) is another metric used in the COCO keypoint evaluation [265].       
+Object Keypoint Similarity (OKS) plays the similar role as the Intersection over Union (IoU) in object detection and is used for AP or AR.       
+This measure is computed from the scale of the subject and the distance between predicted points and ground truth points.       
+The COCO evaluation usually uses mAP across 10 OKS thresholds as the evaluation metric.
+
+AP指標は，精度（正解数に対する真の正解数の割合）とリコール（グランドトゥルースの正解数に対する真の正解数の割合）に基づいて，キーポイント検出の精度を測定する指標です．      
+APは，0から1にわたるrecallの平均精度値を計算する．APにはいくつかの類似した亜種がある．     
+例えば，Average Precision of Keypoints (APK) は [264] で紹介されている．      
+Mean Average Precision (mAP)は、全クラスの平均精度の平均であり、MPIIデータセットやPoseTrackデータセットで広く使用されている指標である。Average Recall (AR)は、COCOキーポイント評価で使用される別のメトリックである[265]。      
+オブジェクトキーポイント類似度(OKS)は、オブジェクト検出におけるIoU(Intersection over Union)と同様の役割を果たし、APやARに使用される。      
+この指標は、被写体のスケールと、予測点とグランドトゥルース点の距離から計算される。      
+COCOの評価では、通常、10個のOKS閾値にわたるmAPを評価指標として使用しています。
