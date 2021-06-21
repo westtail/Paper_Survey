@@ -1315,3 +1315,167 @@ Mean Average Precision (mAP)は、全クラスの平均精度の平均であり�
 オブジェクトキーポイント類似度(OKS)は、オブジェクト検出におけるIoU(Intersection over Union)と同様の役割を果たし、APやARに使用される。      
 この指標は、被写体のスケールと、予測点とグランドトゥルース点の距離から計算される。      
 COCOの評価では、通常、10個のOKS閾値にわたるmAPを評価指標として使用しています。
+
+### 5.3 Performance Comparison of 2D HPE Methods 2次元HPE法の性能比較
+In Tables 3 ∼ 6, we have summarized the performance of different 2D HPE methods on the popular datasets together with the relevant and commonly used evaluation metrics.         
+ For comparison on the LSP dataset, the PCP measure is employed to evaluate the performance of body detection-based and regression-based methods in Table 3.       
+Table 4 shows the comparison results for different 2D HPE methods on the MPII dataset using PCKh@0.5 measure.      
+It is worth noting that body detection methods generally have better performance than regression methods, thus gaining more popularity in recent 2D HPE research.      
+In Table 5, the mAP comparison on the full testing set of the MPII dataset is reported.     
+Table 6 presents the experimental results of different 2D HPE methods on the test-dev set of the COCO dataset, together with a summary of the experiment settings (extra data, backbones in models, input images size) and AP scores for each approach.     
+
+表3〜表6では、一般的なデータセットにおけるさまざまな2D HPE手法の性能を、関連する一般的な評価指標とともにまとめています。        
+ 表3では，LSPデータセットでの比較のため，PCP指標を用いて，ボディ検出ベースの手法と回帰ベースの手法の性能を評価しています。      
+表4は，MPIIデータセットにおける異なる2D HPE手法の比較結果を，PCKh@0.5 指標を用いて示したものである．     
+ボディ検出法は一般的に回帰法よりも優れた性能を有しており、最近の2D HPE研究で人気を博していることは注目に値します。     
+表5では、MPIIデータセットの全テストセットにおけるmAPの比較を報告しています。    
+表6は、COCOデータセットのテスト-devセットにおけるさまざまな2D HPE手法の実験結果と、実験設定の概要（追加データ、モデル内のバックボーン、入力画像サイズ）、各手法のAPスコアを示しています。   
+
+### 5.4 Datasets for 3D HPE 3D HPE 用データセット
+In contrast to numerous 2D human pose datasets with highquality annotation, acquiring accurate 3D annotation for 3D HPE datasets is a challenging task that requires motion capture systems such as MoCap and wearable IMUs.      
+Due to this requirement, many 3D pose datasets are created in constrained environments.      
+Here, the widely used 3D pose datasets under different settings are summarized in Table 7.    
+
+高品質のアノテーションが施された多数の2Dヒト・ポーズ・データセットとは対照的に、3D HPEデータセットのために正確な3Dアノテーションを取得することは、MoCapやウェアラブルIMUなどのモーションキャプチャシステムを必要とする困難な作業です。     
+この要件のため、多くの3Dポーズデータセットは、制約のある環境で作成されています。     
+ここでは、さまざまな環境下で広く使用されている3Dポーズデータセットを表7にまとめている。 
+
+#### HumanEva Dataset HumanEvaデータセット
+HumanEva Dataset [266] contains 7 calibrated video sequences (4 gray-scale and 3 color) with ground truth 3D annotation captured by a commercial MoCap system from ViconPeak.       
+The database consists of 4 subjects performing 6 common actions (walking, jogging, gesturing, throwing and catching a ball, boxing, and combo) in a 3m × 2m area.       
+Dataset Link: http://humaneva.is.tue.mpg.de/
+
+HumanEva Dataset [266] には、ViconPeak社の商用MoCapシステムで撮影された、グラウンド・トゥルースの3Dアノテーション付きの7つのキャリブレーションされたビデオ・シーケンス（グレースケール4つ、カラー3つ）が含まれている。      
+このデータベースは、4人の被験者が3m×2mのエリアで6つの一般的な動作（歩行、ジョギング、ジェスチャー、ボールを投げて捕まえる、ボクシング、コンボ）を行っています。      
+データセットリンク： http://humaneva.is.tue.mpg.de/
+
+#### Human3.6M ヒューマン3.6M
+Human3.6M [267] is the most widely used indoor dataset for 3D HPE from monocular images and videos.        
+There are 11 professional actors (6 males and 5 females) performing 17 activities (e.g., smoking, taking photo, talking on the phone) from 4 different views in an indoor laboratory environment.      
+This dataset contains 3.6 million 3D human poses with 3D ground truth annotation captured by accurate marker-based MoCap system.      
+There are 3 protocols with different training and testing data splits.       
+Protocol #1 uses images of subjects S1, S5, S6, and S7 for training, and images of subjects S9 and S11 for testing.       
+Protocol #2 uses the same training-testing split as Protocol #1, but the predictions are further post-processed by a rigid transformation before comparing to the ground-truth.          
+Protocol #3 uses images of subjects S1, S5, S6, S7, and S9 for training, and images of subjects S11 for testing.     
+Dataset Link: http://vision.imar.ro/human3.6m/
+
+Human3.6M [267]は、単眼の画像やビデオからの3D HPEのための最も広く使用されている屋内データセットです。       
+11人のプロの俳優（男性6人、女性5人）が、屋内の実験室環境で4つの異なる視点から17の活動（喫煙、写真撮影、電話での会話など）を行っています。     
+このデータセットには、360万の3Dポーズと、正確なマーカーベースのMoCapシステムによって撮影された3Dグランドトゥルースアノテーションが含まれています。     
+3つのプロトコルがあり、トレーニングデータとテストデータの分割が異なります。      
+プロトコル#1では、被験者S1、S5、S6、S7の画像をトレーニングに、被験者S9とS11の画像をテストに使用しています。      
+プロトコル#2は、プロトコル#1と同じトレーニングとテストの分割を使用していますが、予測値はグランドトゥルースと比較する前に、剛体変換によってさらに後処理されます。         
+プロトコル#3では、トレーニングに被験者S1、S5、S6、S7、S9の画像を使用し、テストに被験者S11の画像を使用する。    
+データセットリンク： http://vision.imar.ro/human3.6m/
+
+#### MPI-INF-3DHP
+MPI-INF-3DHP [269] is a dataset captured by a commercial marker-less MoCap system in a multi-camera studio.      
+There are 8 actors (4 males and 4 females) performing 8 human activities including walking, sitting, complex exercise posed, and dynamic actions.      
+More than 1.3 million frames from 14 cameras were recorded in a green screen studio
+which allows automatic segmentation and augmentation.      
+Dataset Link: http://gvv.mpi-inf.mpg.de/3dhp-dataset/ 
+
+MPI-INF-3DHP [269]は，市販のマーカーレスMoCapシステムを用いて，マルチカメラスタジオで撮影されたデータセットである．     
+8人のアクター（男性4人、女性4人）が、歩く、座る、複雑な運動のポーズ、ダイナミックなアクションなど、8つのヒューマンアクティビティを行っている。     
+14台のカメラから130万以上のフレームをグリーンスクリーンスタジオで記録しました。
+これにより、自動的なセグメンテーションとオーグメンテーションが可能になりました。     
+データセットのリンク: http://gvv.mpi-inf.mpg.de/3dhp-dataset/ 
+
+#### TotalCapture Dataset
+TotalCapture Dataset [270] contains fully synchronised videos with IMU and Vicon labeling for over 1.9 million frames.     
+There are 13 sensors placed on key body parts such as head, upper and lower back, upper and lower limbs, and feet.      
+The data was collected indoors with 8 calibrated full HD video cameras at 60 Hz measuring roughly 4 × 6 m.     
+There are 5 actors (4 males and 1 female) performing actions, repeated 3 times, including walking, running, and freestyle.      
+Dataset Link: https://cvssp.org/data/totalcapture/
+
+TotalCapture Dataset [270]は、190万フレーム以上のIMUおよびViconラベリングされた完全に同期したビデオを含んでいます。    
+頭部、背中の上部と下部、手足の上部と下部、足など、体の主要部分に13個のセンサーが配置されています。     
+データは屋内で、キャリブレーションされた8台のフルHDビデオカメラを用いて、60Hzで約4×6mの大きさで収集されました。    
+5人のアクター（男性4人、女性1人）が、歩く、走る、フリースタイルなどの動作を3回繰り返しています。     
+データセットのリンク： https://cvssp.org/data/totalcapture/
+
+#### CMU Panoptic Dataset
+CMU Panoptic Dataset [268] contains 65 sequences (5.5 hours) with 1.5 million of 3D skeletons of multiple people scenes.      
+This dataset was captured by a marker-less motion capture system with 480 VGA camera views, more than 30 HD views, 10 RGB-D sensors, and a calibrated hardwarebased synchronization system.       
+The test set contains 9,600 frames from HD cameras for 4 activities (Ultimatum, Mafia, Haggling, and Pizza).      
+Dataset Link: domedb.perception.cs.cmu.edu/
+
+CMU Panoptic Dataset [268]には，65個のシーケンス（5.5時間）と150万個の複数の人物シーンの3Dスケルトンが含まれています．     
+このデータセットは，480個のVGAカメラビュー，30個以上のHDビュー，10個のRGB-Dセンサ，およびキャリブレーションされたハードウェアベースの同期システムを備えたマーカーレスモーションキャプチャシステムによってキャプチャされています．      
+テストセットには、4つのアクティビティ（Ultimatum, Mafia, Haggling, Pizza）のHDカメラからの9,600フレームが含まれています。     
+データセットリンク: domedb.perception.cs.cmu.edu/
+
+#### 3DPW Dataset
+3DPW Dataset [230] was collected by hand-held cameras with IMUs in natural scenes capturing daily activities (e.g., shopping in the city, going up-stairs, doing sports, drinking coffee, and taking the bus).      
+There are 60 video sequences (more than 51,000 frames) in this dataset and the corresponding 3D poses were computed by wearable IMUs.     
+The test set contains 9,600 frames from HD cameras for 4 activities (Ultimatum, Mafia, Haggling, and Pizza).      
+Dataset Link: https://virtualhumans.mpi-inf.mpg.de/3DPW/
+
+3DPWデータセット[230]は，IMUを搭載したハンドヘルドカメラを用いて，日常的な行動（街での買い物，階段を上る，スポーツをする，コーヒーを飲む，バスに乗るなど）を撮影した自然なシーンを収集したものである．     
+このデータセットには60のビデオシーケンス（51,000フレーム以上）が含まれており，対応する3DポーズはウェアラブルIMUによって計算されています．    
+テストセットには、4つのアクティビティ（Ultimatum, Mafia, Haggling, Pizza）に対するHDカメラからの9,600フレームが含まれています。     
+データセットのリンク： https://virtualhumans.mpi-inf.mpg.de/3DPW/
+
+#### MuCo-3DHP
+MuCo-3DHP Dataset [197] is a multi-person 3D training set composed by the MPI-INF-3DHP single-person dataset with ground truth 3D pose from multi-view marker-less motion capture system.      
+Background augmentation and shading-aware foreground augmentation of person appearance were applied to enable data diversity.   
+Dataset Link: http://gvv.mpi-inf.mpg.de/projects/SingleShotMultiPerson/
+
+MuCo-3DHP Dataset [197]は，MPI-INF-3DHPの1人用データセットに，多視点マーカーレスモーションキャプチャシステムから得られたグランドトゥルースの3Dポーズを加えた，複数人用の3Dトレーニングセットです．     
+データの多様性を実現するために，人物の外見の背景拡張とシェーディングを考慮した前景拡張が適用されています．  
+データセットのリンク: http://gvv.mpi-inf.mpg.de/projects/SingleShotMultiPerson/
+
+#### MuPoTS-3D Dataset
+MuPoTS-3D Dataset [197] is a multi-person 3D test set and its ground-truth 3D poses were captured by a multi-view marker-less MoCap system containing 20 real-world scenes (5 indoor and 15 outdoor).     
+There are challenging samples with occlusions, drastic illumination changes, and lens flares in some of the outdoor footage.      
+More than 8,000 frames were collected in the 20 sequences by 8 subjects. 
+Dataset Link: http://gvv.mpi-inf.mpg.de/projects/SingleShotMultiPerson/
+
+MuPoTS-3D Dataset [197]は、多人数用の3Dテストセットで、20の実世界シーン（屋内5、屋外15）を含むマルチビューマーカーレスMoCapシステムで撮影された3Dポーズのグランドトゥルースです。    
+屋外の映像の一部には、オクルージョン、急激な照明変化、レンズフレアなどの困難なサンプルがあります。     
+8人の被験者により、20シーンで8,000以上のフレームが収集されました。
+データセットリンク: http://gvv.mpi-inf.mpg.de/projects/SingleShotMultiPerson/
+
+#### AMASS Dataset
+AMASS Dataset [176] was created by unifying 15 different optical marker-based MoCap datasets and using the SMPL model to represent human motion sequences.     
+This large dataset contains more than 40 hours of motion data in 8,593 sequences of 9 million frames sampled at 60 Hz. More than 11,000 motions were recorded over 300 subjects.       
+Dataset Link: https://amass.is.tue.mpg.de/
+
+AMASSデータセット[176]は、15の異なる光学マーカーベースのMoCapデータセットを統合し、SMPLモデルを用いて人間のモーションシーケンスを表現することで作成されました。    
+この大規模なデータセットには、60Hzでサンプリングされた900万フレームの8,593シーケンスの40時間以上のモーションデータが含まれています。300人の被験者に対して、11,000以上のモーションが記録されています。      
+データセットのリンク： https://amass.is.tue.mpg.de/
+
+NBA2K
+NBA2K Dataset [271] was extracted from the NBA2K19 video games by intercepting calls between the game engine and the graphic card using RenderDoc.     
+The synthetic dataset contains 27,144 basketball poses spanning 27 subjects.      
+The 3D poses of 35 keypoints and the corresponding RGB images are provided in this dataset with high quality.     
+Dataset Link:https://github.com/luyangzhu/NBA2K-dataset
+
+NBA2K Dataset [271]は，RenderDocを用いてゲームエンジンとグラフィックカード間のコールを傍受することで，NBA2K19ビデオゲームから抽出されたものである．    
+この合成データセットには，27人の被験者のバスケットボールのポーズが27,144個含まれています．     
+このデータセットでは，35個のキーポイントの3Dポーズと，それに対応するRGB画像が高品質で提供されています．    
+データセットのリンク:https://github.com/luyangzhu/NBA2K-dataset
+
+#### GTA-IM 
+GTA-IM Dataset [243] is a GTA Indoor Motion dataset collected from Grand Theft Auto (GTA) video game by the GTA game engine.    
+There are one million RGB-D frames of 1920 × 1080 resolution with ground-truth 3D human pose of 98 joints, covering various actions including sitting, walking, climbing, and opening the door.       
+Each scene contains several settings such as living rooms, bedrooms and kitchens that emphasize human-scene interactions.      
+Dataset Link: https://people.eecs.berkeley.edu/∼zhecao/hmp/
+
+GTA-IMデータセット[243]は，ビデオゲーム「Grand Theft Auto（GTA）」からGTAゲームエンジンによって収集されたGTAインドアモーションデータセットである．   
+このデータセットは，1920 × 1080 の解像度の 100 万個の RGB-D フレームと，98 個の関節からなるグランドトゥルースな 3D 人体姿勢で構成されており，座る，歩く，登る，ドアを開けるなどの様々な動作をカバーしています．      
+各シーンには、リビングルーム、ベッドルーム、キッチンなどの設定があり、人間とシーンのインタラクションが強調されています。     
+データセットリンク： https://people.eecs.berkeley.edu/∼zhecao/hmp/
+
+#### Occlusion-Person Dataset オクルージョン人物データセット
+Occlusion-Person Dataset [213] is a multi-view synthetic dataset with occlusion labels for the joints in images. UnrealCV [272] was used to render multi-view images and depth maps from 3D models.      
+A total of 8 cameras were used every 45 degrees on a circle of two meters radius.     
+This dataset contains 73K frames with 20.3% of the joints occluded.       
+The ground truth 3D annotation and occlusion labels are also provided.       
+Dataset Link: https://github.com/zhezh/occlusion_person
+
+Occlusion-Person Dataset [213] は，画像中の関節に対するオクルージョン・ラベルを含むマルチビュー合成データセットです．マルチビュー画像と3Dモデルのデプスマップのレンダリングには、UnrealCV [272]が使用されました。     
+半径2メートルの円の上に、45度ごとに合計8台のカメラを使用しました。    
+このデータセットには73Kフレームが含まれており，関節の20.3%がオクルージョンしている．      
+また、グランドトゥルースの3Dアノテーションとオクルージョンラベルも提供されています。      
+データセットのリンク: https://github.com/zhezh/occlusion_person
