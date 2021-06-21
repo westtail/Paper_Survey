@@ -1577,3 +1577,200 @@ The best two scores are marked in red and blue, respectively.
 
 Human3.6Mデータセットにおける異なる3DマルチビューHPEアプローチの比較。    
 ベスト2のスコアはそれぞれ赤と青で示されている。  
+
+### 5.7 Conference Workshops and Challenges for HPE HPEに関する会議のワークショップとチャレンジ
+Due to the increasing interest in HPE, workshops and challenges on HPE are held in conjunction with computer vision conference venues like CVPR, ICCV and ECCV.     
+These workshops aim at gathering researchers and practitioners work on HPE to discuss the current state-of-the-art as well as future directions to concentrate on.     
+In Table 12, we summarize the relevant 2D and 3D HPE workshops and challenges in this research field from 2017 to 2020.
+
+HPEへの関心の高まりを受けて、CVPR、ICCV、ECCVなどのコンピュータビジョン会議の会場では、HPEに関するワークショップやチャレンジが開催されています。    
+これらのワークショップは、HPEに取り組む研究者や実務者を集めて、現在の最新技術や今後注力すべき方向性について議論することを目的としている。    
+表12では、2017年から2020年にかけて、この研究分野に関連する2Dおよび3DのHPEワークショップと課題をまとめている。
+
+ICCV 2017 PoseTrack Challenge: Human Pose Estimation and Tracking in the Wild https://posetrack.net/workshops/iccv2017/    
+ICCV 2017 PoseTrack Challenge：野生での人間のポーズ推定と追跡 https://posetrack.net/workshops/iccv2017/
+
+ECCV 2018  PoseTrack Challenge: Articulated People Tracking in the Wild  https://posetrack.net/workshops/eccv2018/
+
+CVPR 2018  3D humans 2018: 1st International workshop on Human pose, motion, activities and shape  https://project.inria.fr/humans2018/#
+
+CVPR 2019  3D humans 2019: 2nd International workshop on Human pose, motion, activities and shape  https://sites.google.com/view/humans3d/
+
+CVPR 2019  Workshop On Augmented Human: Human-centric Understanding  https://vuhcs.github.io/vuhcs- 2019/index.html
+
+CVPR 2020  Towards Human-Centric Image/Video Synthesis  https://vuhcs.github.io/
+
+ECCV 2020  3D poses in the wild challenge  https://virtualhumans.mpi-inf.mpg.de/3DPW Challenge/
+
+ACM Multimedia 2020  Large-scale Human-centric Video Analysis in Complex Events http://humaninevents.org/
+
+
+## 6 APPLICATIONS 応用例
+In this section, we review related works of exploring HPE for a few popular applications (Fig. 7).
+
+このセクションでは、いくつかの一般的なアプリケーションのためにHPEを探索した関連作品をレビューします（図7）。
+
+### Action recognition, prediction, detection, and tracking:      行動認識、予測、検出、追跡    
+Pose information has been utilized as cues for various applications such as action recognition, prediction, detection, and tracking.       
+Angelini et al. [274] proposed a real-time action recognition method using a pose-based algorithm.       
+Yan et al. [275] leveraged the dynamic skeleton modality of pose for action recognition.          
+Markovitz et al. [276] studied human pose graphs for anomaly detection of human actions in videos.      
+Cao et al. [243] used the predicted 3D pose for long-term human motion prediction.       
+Sun et al. [277] proposed a viewinvariant probabilistic pose embedding for video alignment.     
+Pose-based video surveillance enjoys the advantage of preserving privacy by monitoring through pose and human mesh representation instead of human sensitive identities.
+Das et al. [278] embedded video with pose to identify activities of daily living for monitoring human behavior.
+
+姿勢情報は、行動認識、予測、検出、追跡などの様々なアプリケーションの手掛かりとして利用されている。      
+Angeliniら[274]は，姿勢ベースのアルゴリズムを用いたリアルタイム行動認識手法を提案している．      
+Yanら[275]は、行動認識のためにポーズの動的スケルトンモダリティを活用した。         
+Markovitz ら[276]は、動画内の人間の行動を異常に検出するための人間のポーズ・グラフを研究している。     
+Cao ら [243] は、予測された 3D ポーズを長期的な人間の動きの予測に利用した。      
+Sunら[277]は、ビデオの位置合わせのために、視野不変の確率的ポーズ埋め込みを提案した。    
+ポーズベースのビデオ監視は、人間の敏感なアイデンティティではなく、ポーズと人間のメッシュ表現を通して監視することで、プライバシーを保護できるという利点があります。
+Dasら[278]は、人間の行動を監視するために、日常生活の活動を識別するために、ビデオにポーズを埋め込んだ。
+
+### Action correction and online coaching: アクション補正とオンラインコーチング。
+Some activities such as dancing, sporting, and professional training require precise human body control to strictly react as the standard pose.      
+Normally personal trainers are responsible for the pose correction and action guidance in a face-to-face manner.       
+With the help of 3D HPE and action detection, AI personal trainers can make coaching more convenient by simply setting up cameras without personal trainer presenting.       
+Wang et al. [279] designed an AI coaching system with a pose estimation module for personalized athletic training assistance.      
+
+ダンスやスポーツ、プロのトレーニングなどのアクティビティでは、基準となるポーズに厳密に反応するために、人間の正確なボディコントロールが求められます。     
+通常、パーソナルトレーナーは、対面でポーズ補正や動作指導を行います。      
+3D HPEと行動検出を利用すれば、パーソナルトレーナーが提示しなくても、カメラを設置するだけで、AIパーソナルトレーナーがコーチングをより便利に行うことができます。      
+Wangら[279]は、パーソナライズされたアスレチックトレーニング支援のために、ポーズ推定モジュールを備えたAIコーチングシステムを設計しました。  
+
+### Clothes parsing: 洋服のパーシング 
+The e-commerce trends have brought about a noticeable impact on various aspects including clothes purchases. 
+Clothing product in pictures can no longer satisfy customers’ demands, and customers hope to see the reliable appearance as they wear their selected clothes.
+Clothes parsing and pose transfer [280] make it possible by inferring the 3D appearance of a person wearing a specific clothes. 
+HPE can provide plausible human body regions for cloth parsing. 
+Moreover, the recommendation system can be upgraded by evaluating appropriateness based on the inferred reliable 3D appearance of customers with selected items. 
+Patel et al. [281] achieved clothing prediction from 3D pose, shape and garment style.
+
+電子商取引の動向は、衣服の購入を含む様々な面で顕著な影響をもたらしています。
+写真に写っている服は，もはや顧客の要求を満足させるものではなく，顧客は選んだ服を着たときの信頼できる姿を見たいと思っている．
+それを可能にするのが Clothes parsing and pose transfer [280] であり，特定の服を着ている人の3次元的な外観を推論することができる．
+HPEは、服の解析のために、もっともらしい人体領域を提供することができる。
+さらに、選択したアイテムを身につけた顧客の推定された信頼できる3D外観に基づいて適切性を評価することで、推薦システムをアップグレードすることができます。
+Patelら[281]は、3Dのポーズ、形状、衣服のスタイルから衣服の予測を実現した。
+
+### Animation, movie, and gaming: アニメーション、映画、ゲーム。
+Motion capture is the key component to present characters with complex movements and realistic physical interactions in industries of animation, movie, and gaming.     
+The motion capture devices are usually expensive and complicated to set up.     
+HPE can provide realistic pose information while alleviating the demand for professional high-cost equipment [282] [283].
+
+モーションキャプチャーは、アニメーション、映画、ゲームなどの業界で、複雑な動きやリアルな身体的インタラクションを持つキャラクターを表現するための重要な要素です。    
+モーションキャプチャー機器は通常、高価でセットアップも複雑です。    
+HPEは、プロフェッショナルな高額機器の需要を軽減しながら、リアルなポーズ情報を提供することができる [282] [283]。 
+
+### AR and VR: 
+Augmented Reality (AR) technology aims to enhance the interactive experience of digital objects into the real-world environment.      
+The objective of Virtual Reality (VR) technology is to provide an immersive experience for the users.      
+AR and VR devices use human pose information as input to achieve their goals of different applications.      
+A cartoon character can be generated in real-world scenes to replace the real person. 
+Weng et al. [284] created 3D character animation from single photo with the help of 3D pose estimation and human mesh recovery.      
+Zhang et al. [285] presented a pose-based system that converts broadcast tennis match videos into interactive and controllable video sprites.     
+The players in the video sprites preserve the techniques and styles as real professional players.
+
+AR（Augmented Reality：拡張現実）技術は、デジタルオブジェクトを現実世界の環境に取り込み、インタラクティブな体験を強化することを目的としています。     
+バーチャルリアリティ（VR）技術は、ユーザーに没入感を与えることを目的としています。     
+ARおよびVRデバイスは、さまざまなアプリケーションの目的を達成するために、人間のポーズ情報を入力として使用します。     
+実世界のシーンでは、実在の人物の代わりに漫画のキャラクターを生成することができる。
+Wengら[284]は，3Dポーズ推定と人間のメッシュ復元を利用して，1枚の写真から3Dキャラクター・アニメーションを作成した．     
+Zhang ら[285]は，放送されたテニスの試合映像を，インタラクテ ィブで制御可能なビデオ・スプライトに変換するポーズベースのシステ ムを発表した．    
+ビデオ・スプライトの中の選手は，実際のプロ選手と同じようなテクニックやスタイルを維持している．
+
+### Healthcare: ヘルスケア 
+HPE provides quantitative human motion information that physicians can diagnose some complex diseases, create rehabilitation training, and operate physical therapy.      
+Lu et al. [286] designed a pose-based estimation system for assessing Parkinson’s disease motor severity.      
+Gu et al. [287] developed a pose-based physical therapy system that patients can be evaluated and advised at home.      
+Furthermore, such a system can be established to detect abnormal action and to predict the following actions ahead of time.      
+Alerts are sent immediately if the system determines that danger may occur.      
+Chen et al. [288] used the HPE algorithms for fall detection monitoring in order to provide immediate assistant.      
+Also, HPE methods can provide reliable posture labels of patients in hospital environments to augment research on neural correlates to natural behaviors [289].    
+HPE は定量的な人間の動作情報を提供するため、医師は複雑な疾患の診断、リハビリテーショントレーニングの作成、理学療法の実施が可能になります。     
+Lu ら [286]は、パーキンソン病の運動強度を評価するための、姿勢に基づいた推定システムを設計しました。     
+Gu ら [287]は、患者が自宅で評価やアドバイスを受けられるように、姿勢ベースの理学療法システムを開発しました。     
+さらに、このようなシステムは、異常な行動を検出し、次の行動を事前に予測するために構築することができます。     
+危険が発生する可能性があるとシステムが判断した場合には、直ちに警告が送られる。     
+Chenら[288]は、転倒検知モニタリングにHPEアルゴリズムを使用して、即時のアシスタントを提供している。     
+また、HPE手法は、病院環境にいる患者の信頼できる姿勢ラベルを提供し、自然な行動の神経相関に関する研究を強化することができる[289]。
+
+## 7 CONCLUSION AND FUTURE DIRECTIONS 結論と将来の方向性
+In this survey, we have presented a systematic overview of recent deep learning-based 2D and 3D HPE methods.       
+A comprehensive taxonomy and performance comparison of these methods have been covered.       
+Despite great success, there are still many challenges as discussed in Sections 3.3 and 4.3. Here, we further point out a few promising future directions to promote advances in HPE research.
+
+この調査では、最近の深層学習ベースの2Dおよび3D HPE手法の体系的な概要を紹介しました。      
+これらの手法の包括的な分類法と性能比較を取り上げた。      
+大きな成功にもかかわらず、セクション3.3と4.3で議論したように、まだ多くの課題があります。ここではさらに、HPE研究の進歩を促進するために、いくつかの有望な将来の方向性を指摘する。
+
+### Domain adaptation for HPE.      HPEのドメイン適応。     
+For some applications such as estimating human pose from infant images [290] or artwork collections [291], there are not enough training data with ground truth annotations.       
+Moreover, data for these applications exhibit different distributions from that of the standard pose datasets.     
+HPE methods trained on existing standard datasets may not generalize well across different domains.      
+The recent trend to alleviate the domain gap is utilizing GAN-based learning approaches.       
+Nonetheless, how to effectively transfer the human pose knowledge to bridge domain gaps remains unaddressed.    
+
+乳児画像からの人間の姿勢の推定[290]やアートワークコレクション[291]などの一部のアプリケーションでは、グランドトゥルースアノテーションを含む十分なトレーニングデータがない。      
+さらに、これらのアプリケーションのデータは、標準的なポーズデータセットのデータとは異なる分布を示している。    
+既存の標準的なデータセットで学習したHPE手法は、異なるドメイン間でうまく一般化できない可能性がある。     
+ドメインギャップを軽減するための最近の傾向は、GANベースの学習アプローチを利用することです。      
+しかし、ドメインギャップを埋めるために、人間のポーズの知識をどのように効果的に伝達するかは、まだ解決されていない。 
+
+### 3D model shape and pose
+Human body models such as SMPL, SMPLify, SMPLX, GHUM & GHUML, and Adam are used to model human mesh representation.     
+However, these models have a huge number of parameters.      
+How to reduce the number of parameters while preserving the reconstructed mesh quality is an intriguing problem.      
+Also, different people have various deformations of body shape.      
+A more effective human body model may utilize other information such as BMI [180] and silhouette [292] for better generalization.     
+
+人体のメッシュ表現をモデル化するために、SMPL、SMPLify、SMPLX、GHUM & GHUML、Adamなどの人体モデルが使われています。    
+しかし、これらのモデルは、膨大な数のパラメータを持っています。     
+再構成されたメッシュの品質を保ちつつ、いかにしてパラメータの数を減らすかは、興味のある問題です。     
+また、人によって体の形は様々に変形します。     
+より効果的な人体モデルは，BMI[180]やシルエット[292]などの他の情報を利用して，より良い一般化を図ることができるかもしれない．
+
+### Most existing methods ignore human interaction with 3D scenes.  既存の手法の多くは、3Dシーンにおける人間のインタラクションを無視しています。
+There are strong human-scene relationship 20 constraints that can be explored such as a human subject cannot be simultaneously present in the locations of other objects in the scene.      
+The physical constraints with semantic cues can provide reliable and realistic 3D HPE.
+
+例えば、人間はシーン内の他のオブジェクトの位置に同時に存在することはできないなど、人間とシーンの強い関係20の制約を探ることができます。     
+物理的な制約と意味的な手がかりを組み合わせることで、信頼性の高い、リアルな3D HPEを実現できます。
+
+### 3D HPE is employed in visual tracking and analysis.     3D HPEは、視覚的な追跡や分析に採用されています。
+Existing 3D human pose and shape reconstruction from videos are not smooth and continuous.     
+One reason is that the evaluation metrics such as MPJPE cannot evaluate the smoothness and the degree of realisticness.      
+Appropriate frame-level evaluation metrics focusing on temporal consistency and motion smoothness should be developed.  
+    
+既存の動画からの3次元人物姿勢・形状復元は、滑らかで連続的ではありません。    
+その理由の一つは、MPJPE などの評価指標では、滑らかさやリアルさの度合いを評価できないためです。     
+時間的な整合性や動きの滑らかさに着目した適切なフレームレベルの評価指標を開発する必要がある。    
+
+### Existing well-trained networks pay less attention to resolution mismatch.  既存のよく訓練されたネットワークは、解像度の不一致にはあまり注意を払いません。
+The training data of HPE networks are usually high resolution images or videos, which may lead to inaccurate estimation when predicting human pose from low resolution input.      
+The contrastive learning scheme [293] (e.g., the original image and its low resolution version as a positive pair) might be helpful for building resolutionaware HPE networks.   
+
+HPEネットワークの学習データは、通常、高解像度の画像や動画であり、低解像度の入力から人間の姿勢を予測する場合には、不正確な推定につながる可能性がある。     
+解像度を考慮したHPEネットワークを構築するためには、コントラスト学習スキーム[293]（例えば、元の画像とその低解像度バージョンを正のペアとする）が役立つかもしれない。    
+
+### Deep neural networks in vision tasks are vulnerable to adversarial attacks.   ビジョンタスクにおけるディープニューラルネットワークは、敵対的な攻撃に対して脆弱です   
+The imperceptible noise can significantly affect the performance of HPE.     
+There are few works [294] [295] that consider adversarial attack for HPE.     
+The study of defense against adversarial attacks can improve the robustness of HPE networks and facilitate real-world pose-based applications.
+
+感知できないノイズは、HPEの性能に大きな影響を与える。    
+HPEに対する敵対的攻撃を考慮した研究はほとんどない [294] [295]。    
+敵対的攻撃に対する防御の研究は、HPE ネットワークのロバスト性を向上させ、実世界でのポーズベースのアプリケーションを促進することができる。
+
+### Human body parts may have different movement patterns and shapes due to the heterogeneity of the human body.    人間の体のパーツは、その不均質性ゆえに、異なる動きのパターンや形状を持つことがあります。     
+A single shared network architecture may not be optimal for estimating all body parts with various degrees of freedom.     
+Neural Architecture Search (NAS) [296] can search the optimal architecture for estimating each body part [297], [298].     
+Also, NAS can be used for discovering efficient HPE network architectures to reduce the computational cost [299].     
+It is also worth exploring multi-objective NAS in HPE when multiple objectives (e.g, latency, accuracy and energy consumption) have to be met.
+
+さまざまな自由度を持つすべての体の部位を推定するためには、単一の共有ネットワーク・アーキテクチャでは最適ではない場合があります。    
+Neural Architecture Search (NAS) [296]は，各身体部位を推定するための最適なアーキテクチャを探索することができる [297]，[298]．    
+また、NASは、計算コストを削減するために、効率的なHPEネットワーク・アーキテクチャを発見するために使用することができる[299]。    
+複数の目的（レイテンシー、精度、エネルギー消費など）を満たさなければならない場合、HPEにおける多目的NASを調査することも価値がある。
