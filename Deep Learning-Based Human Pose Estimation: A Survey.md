@@ -1479,3 +1479,101 @@ Occlusion-Person Dataset [213] は，画像中の関節に対するオクルー�
 このデータセットには73Kフレームが含まれており，関節の20.3%がオクルージョンしている．      
 また、グランドトゥルースの3Dアノテーションとオクルージョンラベルも提供されています。      
 データセットのリンク: https://github.com/zhezh/occlusion_person
+
+### 5.5 Evaluation Metrics for 3D HPE 3D HPEの評価指標
+#### MPJPE (Mean Per Joint Position Error) 
+MPJPE (Mean Per Joint Position Error) is the most widely used evaluation metric to assess the performance of 3D HPE.     
+MPJPE is computed by using the Euclidean distance between the estimated 3D joints and the ground truth positions as follows:      
+where N is the number of joints, Ji and J∗i are the ground truth position and the estimated position of the ith joint, respectively.     
+PMPJPE, also called Reconstruction Error, is the MPJPE after rigid alignment by a post-processing between the estimated pose and the ground truth pose.      
+NMPJPE is defined as the MPJPE after normalizing the predicted positions in scale to the reference [205].      
+
+MPJPE（Mean Per Joint Position Error）は，3D HPEの性能を評価するために最も広く用いられている評価指標です．    
+MPJPEは，推定された3次元関節とグランドトゥルースの位置との間のユークリッド距離を用いて，以下のように計算される．     
+ここで，Nは関節の数です．JiおよびJ∗iは，それぞれi番目の関節のGround Truth位置と推定位置である．    
+PMPJPEはReconstruction Errorとも呼ばれ，推定ポーズとグランドトゥルースポーズの間に後処理を施してリジッドアライメントを行った後のMPJPEです．     
+NMPJPEは、予測された位置を基準にスケールで正規化した後のMPJPEと定義される[205]。   
+
+#### MPVE (Mean Per Vertex Error)
+MPVE (Mean Per Vertex Error) [169] measures the Euclidean distances between the ground truth vertices and the predicted vertices as follows:
+where N is the number of vertices, V is the ground truth vertices, and V∗ is the estimated vertices.
+
+MPVE（Mean Per Vertex Error）[169]は，以下のように，グランドトゥルースの頂点と予測された頂点の間のユークリッド距離を測定する．
+ここで，N は頂点の数，V はグランドトゥルースの頂点，V∗ は推定された頂点である．
+
+#### 3DPCK
+3DPCK is a 3D extended version of the Percentage of Correct Keypoints (PCK) metric used in 2D HPE evaluation.     
+An estimated joint is considered as correct if the distance between the estimation and the ground-truth is within a certain threshold.       
+Generally the threshold is set to 150mm.   
+
+3DPCKは，2D HPE評価で用いられているPCK（Percentage of Correct Keypoints）メトリクスを3Dに拡張したものである。    
+推定されたジョイントは、推定値とグランドトゥルースの間の距離がある閾値以内であれば、正しいとみなされます。      
+一般的に、この閾値は150mmに設定されています。
+
+### Summary.  まとめ 
+As pointed out by Ji et al. [273], low MPJPE does not always indicate an accurate pose estimation as it depends on the predicted scale of human shape and skeleton.       
+Although 3DPCK is more robust to incorrect joints, it cannot evaluate the precision of correct joints. Also, existing metrics are designed to evaluate the precision of an estimated pose in a single frame.       
+However, the temporal consistency and smoothness of reconstructed human pose cannot be examined over continuous frames by existing evaluation metrics.     
+Designing frame-level evaluation metrics that can evaluate 3D HPE performance with temporal consistency and smoothness remains an open problem.   
+
+Jiら[273]が指摘しているように、MPJPEの低さは、人間の形状や骨格の予測スケールに依存するため、必ずしも正確なポーズ推定を示しているとは限らない。      
+3DPCKは正しくない関節に対してより頑健であるが、正しい関節の精度を評価することはできない。また、既存の評価指標は、1つのフレームで推定されたポーズの精度を評価するように設計されている。      
+しかし、既存の評価指標では、再構成された人間のポーズの時間的な一貫性や滑らかさを連続したフレームで調べることができません。    
+時間的な整合性や滑らかさを考慮して、3D HPE の性能を評価できるフレームレベルの評価指標を設計することは、今後の課題です。  
+
+### 5.6 Performance Comparison of 3D HPE Methods 3D HPE手法の性能比較
+Tables 8 ∼ 11 provide performance comparison of different 3D HPE methods on the widely used datasets corresponding to the single-view sing le-person, single-view multi-person, and multi-view scenarios.     
+In Table 8, most 3D single-view single-person HPE models successfully estimate 3D human pose on the Human3.6M dataset with remarkable precision.     
+Although the Human3.6M dataset has a large size of training and testing data, it only contains 11 actors (6 male and 5 female) performing 17 activities such as eating, discussion, smoking, and taking photo.       
+When estimating 3D pose on the in-the-wild data with more complex scenarios, the performance of these methods are degraded.      
+It is also observed that model-based methods perform on par with model-free methods.     
+Utilizing temporal information when video data is available can improve the performance.     
+3D single-view multi-person HPE is a harder task than 3D single-view single-person HPE due to more severe occlusion.      
+As shown in Table 9 and Table 10, good progress has been made in single-view multi-person HPE methods in recent years.      
+By comparing the results from Table 8 and Table 11, it is evident that the performance (e.g., MPJPE under Protocol 1) of multi-view 3D HPE methods has improved compared to single-view 3D HPE methods using the same dataset and evaluation metric.      
+
+表8〜表11は、広く使われているデータセットを対象に、3D HPE手法の性能比較を示したもので、単視点1人、単視点複数人、複数視点のシナリオに対応している。    
+表8では、ほとんどの3D単視点1人用HPEモデルが、Human3.6Mデータセットにおいて、人間の3Dポーズを非常に高い精度で推定することに成功しています。    
+Human3.6Mデータセットは、トレーニングデータとテストデータのサイズが大きいにもかかわらず、11人のアクター（男性6人、女性5人）が、食事、議論、喫煙、写真撮影など17のアクティビティを行っているだけです。      
+より複雑なシナリオを持つ実世界のデータに対して3Dポーズを推定する場合、これらの手法の性能は低下してしまう。     
+また，モデルベースの手法は，モデルフリーの手法と同等の性能を示すことが確認された．    
+ビデオデータが利用可能な場合は、時間情報を利用することで、性能を向上させることができます。    
+3D単視点多人数HPEは、3D単視点単人数HPEよりもオクルージョンが激しく、難しいタスクです。     
+表9および表10に示すように，近年，単視点多人数HPE手法は大きく進歩している。     
+表8と表11の結果を比較すると、同じデータセットと評価指標を用いた場合、多視点3D HPE手法の性能（例えば、プロトコル1のMPJPE）が単視点3D HPE手法に比べて向上していることがわかります。    
+
+#### TABLE 8: 
+Comparison of different 3D single-view single-person HPE approaches on the Human3.6M dataset.      
+The best two scores are marked in red and blue, respectively.     
+Here in model-free approaches, “Direct” indicates the method directly estimating 3D pose without 2D pose representation.     
+“Lifting” indicates the method lifting the 2D pose representation to the 3D space (i.e., 3D pose). 
+“Temporal” means the method using temporal information.
+
+Human3.6Mデータセットにおける，異なる3Dシングルビュー1人用HPE手法の比較．     
+ベスト2のスコアはそれぞれ赤と青で示されている。    
+ここで、モデルフリーアプローチにおいて、"Direct "は、2Dポーズ表現を用いずに直接3Dポーズを推定する手法を示す。    
+"Lifting "は、2Dのポーズ表現を3D空間（すなわち3Dポーズ）に持ち上げる手法を示す。
+"Temporal "は、時間情報を利用する手法を示す。
+
+#### TABLE 9: 
+Comparison of different 3D single-view multiperson HPE approaches on the MuPoTS-3D dataset.     
+The best two scores are marked in red and blue, respectively.     
+
+MuPoTS-3Dデータセットにおける3Dシングルビュー・マルチパーソンHPEアプローチの比較。    
+ベスト2のスコアはそれぞれ赤と青で示されている。  
+
+#### TABLE 10: 
+Comparison of different 3D single-view multiperson HPE approaches on the CMU Panoptic dataset.      
+Ultimatum, Mafia, Haggling, and pizza denote four activities.       
+The best two scores are marked in red and blue, respectively.
+
+CMU Panopticデータセットにおける3Dシングルビュー・マルチパーソンHPEアプローチの比較。     
+Ultimatum, Mafia, Haggling, pizzaは4つのアクティビティを表す。      
+ベスト2のスコアはそれぞれ赤と青で示されている。   
+
+#### TABLE 11: 
+Comparison of different 3D multi-view HPE approaches on the Human3.6M dataset.     
+The best two scores are marked in red and blue, respectively.   
+
+Human3.6Mデータセットにおける異なる3DマルチビューHPEアプローチの比較。    
+ベスト2のスコアはそれぞれ赤と青で示されている。  
