@@ -105,3 +105,72 @@ Pose2Meshは、人間の2Dポーズを入力とすることで、管理下のデ
 * 当社のPose2Meshは、GraphCNNを用いて人間のメッシュの3次元座標を直接回帰させます。    
 モデルパラメータの表現問題を回避し、事前に定義されたメッシュのトポロジーを活用しています。    
 * Pose2Meshは、公開されている様々なデータセットにおいて、これまでの人間の3Dポーズやメッシュを推定する手法よりも優れた結果を示している。推定することができます。
+
+## 2 Related works  関連作品
+
+### 3D human body pose estimation. 人体の3Dポーズ推定。
+Current 3D human body pose estimation methods can be categorized into two approaches according to the input type: an image-based approach and a 2D pose-based approach.     
+The image-based approach takes an RGB image as an input for 3D body pose estimation.     
+Sun et al. [59] proposed to use compositional loss, which exploits the joint connection structure.    
+Sun et al. [60] employed soft-argmax operation to regress the 3D coordinates of body joints in a differentiable way.      
+Sharma et al. [56] incorporated a generative model and depth ordering of joints to predict the most reliable 3D pose that corresponds to the estimated 2D pose.   
+
+現在の3D人体姿勢推定法は、入力タイプによって、画像ベースのアプローチと2Dポーズベースのアプローチの2つに分類されます。   
+画像ベースのアプローチでは、RGB画像を3Dボディ・ポーズ推定の入力として使用する。    
+Sunら[59]は，関節の接続構造を利用したコンポジション・ロスを提案している．     
+Sunら[60]は、体の関節の3次元座標を微分可能な方法で回帰させるために、soft-argmax演算を採用した。     
+Sharmaら[56]は、生成モデルと関節の深さ方向の順序付けを用いて、推定された2Dポーズに対応する最も信頼性の高い3Dポーズを予測した。    
+
+The 2D pose-based approach lifts the 2D human pose to the 3D space.      
+Martinez et al. [40] introduced a simple network that consists of consecutive fullyconnected layers, which lifts the 2D human pose to the 3D space.       
+Zhao et al. [68] developed a semantic GraphCNN to use spatial relationships between joint coordinates.      
+Our work follows the 2D pose-based approach, to make the Pose2Mesh more robust to the domain difference between the controlled environment of the training set and in-the-wild environment of the testing set.    
+
+2D ポーズベースのアプローチは、人間の 2D ポーズを 3D 空間に持ち上げるものである。     
+Martinezら[40]は、完全に接続された連続した層からなる単純なネットワークを導入し、2Dの人間のポーズを3D空間に持ち上げることに成功した。      
+Zhaoら[68]は、関節座標間の空間的関係を利用するために、セマンティックGraphCNNを開発した。     
+本研究では、2Dポーズベースのアプローチを採用し、トレーニングセットの制御された環境とテストセットの野生環境との間の領域差に対してPose2Meshをよりロバストにする。    
+
+### 3D human body and hand pose and mesh estimation. 人体と手の3Dポーズとメッシュの推定。
+A model-based approach trains a neural network to estimate the human mesh model parameters [37, 54].      
+It has been widely used for the 3D human mesh estimation, since it does not necessarily require 3D annotation for mesh supervision.       
+Pavlakos et al. [52] proposed a system that could be only supervised by 2D joint coordinates and silhouette.      
+Omran et al. [47] trained a network with 2D joint coordinates, which takes human part segmentation as input.      
+Kanazawa et al. [27] utilized adversarial loss to regress plausible SMPL parameters.      
+Baek et al. [5] trained a CNN to estimate parameters of the MANO model using neural renderer [29].      
+Kolotouros et al. [31] introduced a self-improving system that consists of SMPL parameter regressor and iterative fitting framework [6].    
+
+モデルベース・アプローチは，ニューラル・ネットワークを訓練して，人間のメッシュ・モデル・パラメータを推定するものである[37, 54]．      
+これは，メッシュを監視するための3次元アノテーションを必ずしも必要としないため，人間の3次元メッシュ推定に広く利用されている．      
+Pavlakosら[52]は，2次元の関節座標とシルエットのみでスーパーバイズできるシステムを提案した．     
+Omranら[47]は，2次元の関節座標を用いてネットワークを学習し，人間の部位のセグメンテーションを入力としている．     
+Kanazawaら[27]は，SMPLのもっともらしいパラメータを回帰するために逆問題を利用した．     
+Baekら[5]は、ニューラルレンダラー[29]を用いて、MANOモデルのパラメータを推定するためにCNNを学習しました。     
+Kolotourosら[31]は，SMPLパラメータの回帰器と反復的なフィッティングフレームワークからなる自己改善システムを紹介した[6]．   
+
+Recently, the advance of fitting frameworks [6, 50] has motivated a modelfree approach, which estimates human mesh coordinates directly.      
+It enabled researchers to obtain 3D mesh annotation, which is essential for the model-free methods, from in-the-wild data.     
+Kolotouros et al. [32] proposed a GraphCNN, which learns the deformation of the template body mesh to the target body mesh.      
+Ge et al. [15] adopted a GraphCNN to estimate vertices of hand mesh. Moon et al. [45] proposed a new heatmap representation, called lixel, to recover 3D human meshes.  
+
+最近では，フィッティングフレームワーク[6, 50]の進歩により，人間のメッシュ座標を直接推定するモデルフリーアプローチが提唱されています．     
+これにより，モデルフリー手法に不可欠な3次元メッシュアノテーションを，実世界のデータから得ることができるようになった．    
+Kolotourosら[32]は，テンプレートボディメッシュからターゲットボディメッシュへの変形を学習するGraphCNNを提案した．     
+Geら[15]はGraphCNNを用いて手のメッシュの頂点を推定している。Moonら[45]は，人間の3次元メッシュを復元するために，lixelと呼ばれる新しいヒートマップ表現を提案した． 
+
+Our Pose2Mesh differs from the above methods, which are image-based, in that it uses the 2D human pose as an input.     
+The proposed system can benefit from the data with 3D annotations, which are captured from controlled environments [22, 26], without the appearance domain gap issue.
+
+我々のPose2Meshは，画像ベースの上記の手法とは異なり 人間の2Dポーズを入力として使用している点である。    
+提案されたシステムは 提案システムは、制御された環境からキャプチャされた3Dアノテーションを持つデータ[22, 26]から、外観ドメインギャップの問題なく恩恵を受けることができる。
+
+### GraphCNN for mesh processing. GraphCNNによるメッシュ処理。
+Recently, many methods consider a mesh as a graph structure and process it using the GraphCNN, since it can fully exploit mesh topology compared with simple stacked fully-connected layers.       
+Wang et al. [65] adopted a GraphCNN to learn a deformation from an initial ellipsoid mesh to the target object mesh in a coarse-to-fine manner.       
+Verma et al. [63] proposed a novel graph convolution operator for the shape correspondence problem.      
+Ranjan et al. [53] also proposed a GraphCNN-based VAE, which learns a latent space of the human face meshes in a hierarchical manner.      
+
+近年、メッシュをグラフ構造とみなし、GraphCNNを用いてメッシュを処理する手法が多くなってきている。GraphCNNは、単純に積み上げた完全連結層に比べて、メッシュのトポロジーを十分に活用できるからである。      
+Wangら[65]は、GraphCNNを用いて、楕円体の初期メッシュから対象物のメッシュへの変形を、粗いものから細かいものへと学習している。      
+Vermaら[63]は、形状対応問題に対する新しいグラフ畳み込み演算子を提案した。     
+Ranjanら[53]もGraphCNNをベースにしたVAEを提案しており，人間の顔のメッシュの潜在空間を階層的に学習することに成功している．     
