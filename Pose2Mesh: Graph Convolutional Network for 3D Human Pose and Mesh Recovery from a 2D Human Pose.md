@@ -174,3 +174,63 @@ Ranjan et al. [53] also proposed a GraphCNN-based VAE, which learns a latent spa
 Wangら[65]は、GraphCNNを用いて、楕円体の初期メッシュから対象物のメッシュへの変形を、粗いものから細かいものへと学習している。      
 Vermaら[63]は、形状対応問題に対する新しいグラフ畳み込み演算子を提案した。     
 Ranjanら[53]もGraphCNNをベースにしたVAEを提案しており，人間の顔のメッシュの潜在空間を階層的に学習することに成功している．     
+
+## 3 PoseNet ポーズネット
+### 3.1 Synthesizing errors on the input 2D pose 入力2Dポーズの合成誤差
+
+PoseNet estimates the root joint-relative 3D pose P3D∈RJ×3 from the 2D pose, where J denotes the number of human joints.      
+We define the root joint of the human body and hand as pelvis and wrist, respectively.      
+The estimated 2D pose often contains errors [55], especially under severe occlusions or challenging poses.       
+To make PoseNet robust to the errors, we synthesize 2D input poses by adding realistic errors on the ground truth 2D pose, following [10, 44], during the training stage.       
+We represent the estimated 2D pose or the synthesized 2D pose as P2D ∈ R J×2.     
+
+PoseNetは、2Dポーズからルートジョイント相対的な3DポーズP3D∈RJ×3を推定する（Jは人間の関節数を表す）。     
+ここでは、人体と手の根元の関節をそれぞれ骨盤と手首と定義する。     
+推定された2次元ポーズには，特に厳しいオクルージョンや挑戦的なポーズの下では，しばしば誤差が含まれる[55]．      
+PoseNetが誤差に対してロバストになるように、学習段階において、[10, 44]に従い、グランドトゥルースの2Dポーズに現実的な誤差を加えて、2D入力ポーズを合成する。      
+推定された2Dポーズまたは合成された2Dポーズを、P2D∈R J×2として表現する。
+
+### 3.2 2D input pose normalization 2D入力ポーズの正規化
+We apply standard normalization to P2D, following [10,64].     
+For this, we subtract the mean from P2D and divide it by the standard deviation, which becomes P¯ 2D.      
+The mean and the standard deviation of P2D represent the 2D location and scale of the subject, respectively.     
+This normalization is necessary because P3D is independent of scale and location of the 2D input pose P2D.     
+
+P2Dには、[10,64]に準拠した標準的な正規化を適用します。    
+これには、P2Dから平均を差し引き、標準偏差で割ると、P¯ 2Dとなります。     
+P2Dの平均と標準偏差は、それぞれ被写体の2D位置とスケールを表しています。    
+P3Dは、2D入力ポーズP2Dのスケールと位置に依存しないため、このような正規化が必要となる。    
+
+### 3.3 Network architecture ネットワーク・アーキテクチャ
+The architecture of the PoseNet is based on that of [10, 40]. The normalized 2D input pose P¯ 2D is converted to a 4096 dimensional feature vector through a fully-connected layer.       
+Then, it is fed to the two residual blocks [21].      
+Finally, the output feature vector of the residual blocks is converted to (3J)-dimensional vector, which represents P3D, by a full-connected layer.    
+
+PoseNetのアーキテクチャは，[10, 40]のものに基づいています。正規化された 2D 入力ポーズ P¯ 2D は，完全連結層を介して 4096 次元の特徴ベクトルに変換される．      
+その後、2つの残差ブロック[21]に供給される。     
+最後に、残差ブロックの出力特徴ベクトルは、完全連結層によって、P3Dを表す(3J)次元のベクトルに変換される。   
+
+## 5 Implementation Details 実装の詳細
+PyTorch [49] is used for implementation. We first pre-train our PoseNet, and then train the whole network, Pose2Mesh, in an end-to-end manner.       
+Empirically, our two-step training strategy gives better performance than the one-step training.     
+The weights are updated by the Rmsprop optimization [61] with a mini-batch size of 64.     
+We pre-train PoseNet 60 epochs with a learning rate 10−3.     
+The learningrate is reduced by a factor of 10 after the 30th epoch.       
+After integrating the pretrained PoseNet to Pose2Mesh, we train the whole network 15 epochs with a learning rate 10−3.      
+The learning rate is reduced by a factor of 10 after the 12th epoch. In addition, we set λe to 0 until 7 epoch on the second training stage, since it tends to cause local optima at the early training phase.      
+We used four NVIDIA RTX 2080 Ti GPUs for Pose2Mesh training, which took at least a half day and at most two and a half days, depending on the training datasets.     
+In inference time, we use 2D pose outputs from Sun et al. [58] and Xiao et al. [66].       
+They run at 5 fps and 67 fps respectively, and our Pose2Mesh runs at 37 fps.           
+Thus, the proposed system can process from 4 fps to 22 fps in practice, which shows the applicability to real-time applications.  
+
+実装にはPyTorch[49]を使用しています。まず，PoseNet を事前に学習し，次にネットワーク全体である Pose2Mesh をエンド・ツー・エンドで学習します．      
+経験的に、我々の2段階のトレーニング戦略は、1段階のトレーニングよりも優れた性能を発揮する。    
+重みはRmsprop最適化[61]によって更新され，ミニバッチサイズは64となっています．    
+学習率10-3で，PoseNetを60エポックで事前学習します．    
+30エポック以降は，学習率を10分の1に下げています．      
+事前学習されたPoseNetをPose2Meshに統合した後，学習率10-3で15エポックのネットワーク全体の学習を行います．     
+12回目のエポック以降は，学習率を10分の1に下げます．また，λeは初期の学習段階で局所最適を起こしやすいため，2回目の学習段階で7エポックまでは0に設定した．     
+Pose2Meshの学習には，NVIDIA RTX 2080 Ti GPUを4台使用し，学習データセットに応じて最低でも半日，最大で2日半を要した．    
+推論には，Sunら[58]およびXiaoら[66]の2Dポーズ出力を使用した．      
+これらはそれぞれ5 fpsと67 fpsで動作し、我々のPose2Meshは37 fpsで動作する。          
+このように，提案システムは実際には4fpsから22fpsの処理が可能であり，リアルタイムアプリケーションへの適用が可能であることがわかる．  
