@@ -210,6 +210,46 @@ PoseNetのアーキテクチャは，[10, 40]のものに基づいています�
 その後、2つの残差ブロック[21]に供給される。     
 最後に、残差ブロックの出力特徴ベクトルは、完全連結層によって、P3Dを表す(3J)次元のベクトルに変換される。   
 
+### 3.4 Loss function 損失関数
+We train the PoseNet by minimizing L1 distance between the predicted 3D pose P3D and groundtruth.     
+The loss function Lpose is defined as follows:     
+Lpose = || P 3D − P 3D∗ ||   (1)     
+where the asterisk indicates the groundtruth.     
+
+予測された3DポーズP3Dとグランドトゥルースの間のL1距離を最小化することで、PoseNetを学習する。    
+損失関数Lposeは以下のように定義される。    
+Lpose = || P 3D - P 3D∗ || (1)     
+ここで，アスタリスクはグランドトゥルースを示す。  
+
+### meshnet image
+Fig. 2: The coarsening initially generates multiple coarse graphs from GM, and adds fake nodes without edges to each graph, following [13].     
+The numbers of vertices range from 96 to 12288 for body meshes and from 68 to 1088 for hand meshes.      
+Fig. 3: The network architecture of MeshNet
+
+図2：粗視化では，最初にGMから複数の粗いグラフを生成し，[13]に倣って各グラフに辺のない偽のノードを追加する．     
+頂点の数は，体のメッシュでは96から12288まで，手のメッシュでは68から1088までとなっている．    
+図3：MeshNetのネットワークアーキテクチャ
+
+##  MeshNet
+
+### 4.1 Graph convolution on pose ポーズに対するグラフの畳み込み
+MeshNet concatenates P¯ 2D and P3D into P∈RJ×5.     
+Then, it estimates the root joint-relative 3D mesh M∈RV×3 from P, where V denotes the number of human mesh vertices.      
+To this end, MeshNet uses the spectral graph convolution [8, 57], which can be defined as the multiplication of a signal x∈RN with afilter gθ = diag(θ) in Fourier domain as follows:     
+gθ ∗ x = U gθUT x, (2)     
+where graph Fourier basis U is the matrix of the eigenvectors of the normalized graph Laplacian L [12], and U T x denotes the graph Fourier transform of x.    
+Specifically, to reduce the computational complexity, we design MeshNet to be based on Chebysev spectral graph convolution [13].   
+
+MeshNetは、P¯ 2DとP3DをP∈RJ×5に連結します。    
+ここで、Vは人間のメッシュの頂点の数を表します。     
+このために，MeshNetはスペクトルグラフコンボリューション[8, 57]を用いる．これは，信号x∈RNとフーリエ領域のafilter gθ = diag(θ)との乗算として，以下のように定義できる。    
+gθ ∗ x = U gθUT x, (2)     
+ここで，グラフフーリエ基底Uは，正規化グラフラプラシアンLの固有ベクトルの行列である[12]。また，U T xはxのグラフフーリエ変換を表す。   
+具体的には，計算量を減らすために，MeshNetはチェビセブ・スペクトル・グラフ・コンボリューション[13]に基づいて設計されている．  
+
+# ここから5章まではあとで訳します
+
+
 ## 5 Implementation Details 実装の詳細
 PyTorch [49] is used for implementation. We first pre-train our PoseNet, and then train the whole network, Pose2Mesh, in an end-to-end manner.       
 Empirically, our two-step training strategy gives better performance than the one-step training.     
@@ -234,3 +274,98 @@ Pose2Meshの学習には，NVIDIA RTX 2080 Ti GPUを4台使用し，学習デー
 推論には，Sunら[58]およびXiaoら[66]の2Dポーズ出力を使用した．      
 これらはそれぞれ5 fpsと67 fpsで動作し、我々のPose2Meshは37 fpsで動作する。          
 このように，提案システムは実際には4fpsから22fpsの処理が可能であり，リアルタイムアプリケーションへの適用が可能であることがわかる．  
+
+## 6 Experiment 実験
+### 6.1 Datasets and evaluation metrics データセットと評価指標
+#### Human3.6M.    
+Human3.6M [22] is a large-scale indoor 3D body pose benchmark, which consists of 3.6M video frames.    
+The groundtruth 3D poses are obtained using a motion capture system, but there are no groundtruth 3D meshes.      
+As a result, for 3D mesh supervision, most of the previous 3D pose and mesh estimation works [27, 31, 32] used pseudo-groundtruth obtained from Mosh [36].       
+However, due to the license issue, the pseudo-groundtruth from Mosh is not currently publicly accessible.       
+Thus, we generate new pseudo-groundtruth 3D meshes by fitting SMPL parameters to the 3D groundtruth poses using SMPLify-X [50].       
+For the fair comparison, we trained and tested previous state-of-the-art methods on the obtained groundtruth using their officially released code.       
+Following [27, 51], all methods are trained on 5 subjects (S1, S5, S6, S7, S8) and tested on 2 subjects (S9, S11).   
+We report our performance for the 3D pose using two evaluation metrics.       
+One is mean per joint position error (MPJPE) [22], which measures the Euclidean distance in millimeters between the estimated and groundtruth joint coordinates,after aligning the root joint.      
+The other one is PA-MPJPE, which calculates MPJPE after further alignment (i.e., Procrustes analysis (PA) [17]).       
+J M is used for the estimated joint coordinates. We only evaluate 14 joints out of 17 estimated joints following [27, 31, 32, 52].
+
+Human3.6M [22]は，360万枚のビデオフレームからなる，大規模な屋内3Dボディポーズベンチマークである．   
+このベンチマークでは，モーションキャプチャシステ ムを用いて 3D ポーズを取得しているが，3D メッシュは取得していない．      
+そのため，3Dメッシュの監視には，これまでの3Dポーズやメッシュ推定の作品[27, 31, 32]のほとんどが，Mosh[36]から得られた擬似的なグランドトゥルースを使用していました．      
+しかし，ライセンスの問題から，Moshからの擬似地表面情報は現在のところ公開されていない．      
+そこで，SMPLify-X [50]を用いて，SMPLのパラメータを3D groundtruthのポーズにフィットさせることで，新たな疑似groundtruthの3Dメッシュを生成した．      
+公平に比較するために，公式にリリースされているコードを用いて，得られたグランドトゥルースに対して過去の最先端の手法をトレーニングし，テストした．      
+[27, 51] に従って，すべての手法は，5人の被験者（S1, S5, S6, S7, S8）でトレーニングされ，2人の被験者（S9, S11）でテストされた．     
+ここでは、2つの評価指標を用いて、3Dポーズの性能を報告します。      
+一つは，MPJPE（mean per joint position error）[22]であり，根元の関節をアライメントした後の推定関節座標と実測関節座標の間のユークリッド距離をミリメートル単位で測定する．     
+もう一つはPA-MPJPEであり，これはMPJPEをさらにアライメント（すなわちProcrustes analysis (PA) [17]）した後に計算するものである．      
+J Mは，推定された関節座標に使用される．我々は、[27, 31, 32, 52]に従い、17個の推定関節のうち、14個の関節のみを評価する。
+
+#### 3DPW. 
+3DPW [39] is captured from in-the-wild and contains 3D body pose and mesh annotations. It consists of 51K video frames, and IMU sensors are leveraged to acquire the groundtruth 3D pose and mesh.     
+We only use the test set of 3DPW for evaluation following [31].      
+MPJPE and mean per vertex position error (MPVPE) are used for evaluation.      
+14 joints from J M, whose joint set follows that of Human3.6M, are evaluated for MPJPE as above.      
+MPVPE measures the Euclidean distance in millimeters between the estimated and groundtruth vertex coordinates, after aligning the root joint.      
+
+3DPW [39]は実社会で撮影されたもので、3Dのボディ・ポーズとメッシュ・アノテーションが含まれています。メッシュのアノテーションが含まれています．51Kのビデオフレームで構成されており、IMUセンサーを利用して 3Dポーズとメッシュを取得しています。    
+評価に使用したのは 3DPWのテストセットのみを使用して評価しています。     
+MPJPEおよびMean per vertex position error (MPVPE) MPVPE）を用いて評価している．     
+関節セットがHuman3.6Mのものと同じであるJ Mの14関節 の14関節について，上記と同様にMPJPEの評価を行った．     
+MPVPEは MPVPEは，関節の根元の位置を合わせた後，推定された頂点座標とグランドトゥルースの頂点座標の間のユークリッド距離をミリ単位で測定する．のユークリッド距離を測定します。 
+
+#### COCO. 
+COCO [35] is an in-the-wild dataset with various 2D annotations such as detection and human joints.     
+To exploit this dataset on 3D mesh learning, Kolotouros et al. [31] fitted SMPL parameters to 2D joints using SMPLify [6].     
+Following them, we use the processed data for training.       
+
+COCO[35]は、様々な2Dアノテーションを持つ野生下のデータセットです。検出や人間の関節など、様々な2Dアノテーションが含まれている。    
+このデータセットを3次元メッシュ学習に活用するために、Kolotouros et al, Kolotourosら[31]は、SMPLify[6]を用いてSMPLパラメータを2D関節に適合させた。    
+彼らに倣って、我々もこの処理済みのデータを学習に使用する。    
+
+#### MuCo-3DHP.      
+MuCo-3DHP [42] is synthesized from the existing MPI-INF3DHP 3D single-person pose estimation dataset [41].      
+It consists of 200K frames, and half of them have augmented backgrounds.      
+For the background augmentation, we use images of COCO that do not include humans to follow Moon et al. [43].      
+Following them, we use this dataset only for the training.     
+
+MuCo-3DHP [42]は，既存のMPI-INF3DHP 3D single-person pose estimation dataset [41]から合成したものである．     
+このデータセットは200Kフレームで構成されており，そのうちの半分は背景が拡張されています．     
+背景の拡張には，Moonら[43]に倣い，人間を含まないCOCOの画像を使用している．     
+彼らに倣って、このデータセットはトレーニングにのみ使用している。    
+
+FreiHAND. 
+FreiHAND [70] is a large-scale 3D hand pose and mesh dataset.      
+It consists of a total of 134K frames for training and testing.       
+Following Zimmermann et al. [70], we report PA-MPVPE, F-scores, and additionally PA-MPJPE of Pose2Mesh.     
+J M is evaluated for the joint errors.     
+
+FreiHAND[70]は、大規模な3Dハンドポーズとメッシュのデータセットである。     
+学習用とテスト用の合計134Kフレームから構成されている。      
+Zimmermannら[70]に従い，PA-MPVPE，F-scores，さらにPose2MeshのPA-MPJPEを報告する．    
+J Mはジョイントエラーで評価しています。    
+
+#　実験は今後和訳
+
+7 Discussion 議論
+Although the proposed system benefits from the homogeneous geometric property of input 2D poses from different domains, it could be challenging to recover various 3D shapes solely from the pose.       
+While it may be true, we found that the 2D pose still carries necessary information to reason the corresponding 3D shape.       
+In the literature, SMPLify [6] has experimentally verified that under the canonical body pose, utilizing 2D pose significantly drops the body shape fitting error compared to using the mean body shape.       
+We show that Pose2Mesh can recover various body shapes from the 2D pose in the supplementary material.   
+
+提案されたシステムは、異なるドメインからの入力2Dポーズの均質な幾何学的特性の恩恵を受けているが、ポーズのみから様々な3D形状を復元するのは難しいかもしれない。      
+しかし、我々は、2Dポーズが、対応する3D形状を推論するために必要な情報を含んでいることを発見した。      
+文献では、SMPLify [6]が、カノニカルなボディポーズの下で、2Dポーズを利用すると、平均ボディシェイプを利用する場合に比べて、ボディシェイプのフィッティングエラーが大幅に減少することを実験的に検証しています。      
+Pose2Meshでは、2Dポーズから様々な体形を復元できることを補足資料で示しています。    
+
+## 8 Conclusion おわりに
+We propose a novel and general system, Pose2Mesh, for 3D human mesh and pose estimation from a 2D human pose.      
+The input 2D pose enables the system to benefit from the 3D data captured from the controlled settings without the appearance domain gap issue.      
+The model-free approach using GraphCNN allows it to fully exploit mesh topology, while avoiding the representation issues of the 3D rotation parameters.      
+We plan to enhance the shape recover capability of Pose2Mesh using denser keypoints or part segmentation, while maintaining the above advantages.    
+
+我々は、人間の2Dポーズから人間の3Dメッシュとポーズを推定するための新規かつ汎用的なシステム、Pose2Meshを提案する。     
+Pose2Mesh は、2D ポーズを入力することで、外見上のドメインギャップの問題なしに、制御された設定からキャプチャされた 3D データの恩恵を受けることができます。     
+GraphCNNを用いたモデルフリーのアプローチにより、メッシュのトポロジーを十分に活用しつつ、3D回転パラメータの表現上の問題を回避することができます。3D回転パラメータの表現問題を回避することができます。     
+今後は、上記の利点を維持しつつ、キーポイントの高密度化やパーツのセグメンテーションにより、Pose2Meshの形状復元能力を向上させていく予定です。   
